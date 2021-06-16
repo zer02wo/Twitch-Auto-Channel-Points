@@ -13,8 +13,6 @@ const observerCallback = function(mutationsList) {
                 pointsButton.click();
                 console.log("Auto-clicked channel points prompt!")
             } else {
-                //TODO: may need to check for a specific node to know that it's passive points and not something in the subtree
-                    //TODO: simple fix would be to check if the element has children
                 //Get pulse animation element
                 const pulseAnimation = mutation.addedNodes[0].querySelector(".pulse-animation");
                 if(pulseAnimation !== undefined) {
@@ -58,7 +56,8 @@ function createObserver() {
 //TODO: create pop-up menu for extension controls: https://www.youtube.com/watch?v=YQnRSa8MGwM
     //TODO: use cookies to track total channel points earned with extension?
         //Or per session instead to remove storage need?
-            //Both?
+        //Or per channel (separate number for each channel it's been enabled on)
+            //All of the above?
     //TODO: use observer.disconnect() as a button to stop auto-channel points
     //TODO: debug mode?
     //TODO: think of more features
