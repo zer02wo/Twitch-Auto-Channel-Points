@@ -1,9 +1,3 @@
-//Get container element for channel points information
-const pointsContainer = document.getElementsByClassName("sc-AxjAm bnsqjT")[0]
-
-//TODO: perform initial check to click button if it already exists before adding observer
-    //Also ensure page has fully loaded before running
-
 const observerCallback = function(mutationsList) {
     //For each observed mutation
     for(const mutation of mutationsList) {
@@ -33,12 +27,33 @@ const observerCallback = function(mutationsList) {
     }
 }
 
-//Options for MutationObserver object
-const observerConfig = {childList: true, subtree: true};
+//TODO: Ensure page has loaded before beginning check
+    //Might be a better way to perform this as an extension
+window.onload = initialCheck(); 
 
-//Create MutationObserver
-const observer = new MutationObserver(observerCallback);
-//Observe pointsContainer with specificied configuration
-observer.observe(pointsContainer, observerConfig);
+function initialCheck() {
+    //Check if channel points button exists before observation
+    const pointsCheck = document.getElementsByClassName("sc-AxjAm bnsqjT")[0].querySelector("button");
+    if(pointsCheck !== null) {
+        //Click button to redeem channel points
+        pointsCheck.click();
+    }
+
+    //Begin observing channel points
+    createObserver();
+}
+
+function createObserver() {
+    //Get container element for channel points information
+    const pointsContainer = document.getElementsByClassName("sc-AxjAm bnsqjT")[0];
+
+    //Options for MutationObserver object
+    const observerConfig = {childList: true, subtree: true};
+
+    //Create MutationObserver
+    const observer = new MutationObserver(observerCallback);
+    //Observe pointsContainer with specificied configuration
+    observer.observe(pointsContainer, observerConfig);
+}
 
 //TODO: Use observer.disconnect() to stop listening at some point
