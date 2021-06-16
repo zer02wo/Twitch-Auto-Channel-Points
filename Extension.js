@@ -5,8 +5,6 @@ const pointsContainer = document.getElementsByClassName("sc-AxjAm bnsqjT")[0]
     //Also ensure page has fully loaded before running
 
 const observerCallback = function(mutationsList) {
-    //TODO: Temp
-    console.log("An update has been observed!");
     //For each observed mutation
     for(const mutation of mutationsList) {
         //If node added in observed mutation
