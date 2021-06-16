@@ -23,21 +23,18 @@ const observerCallback = function(mutationsList) {
                     //Could just display the number of points in the else statement only and just set the log to "Auto-clicked channel points prompt!"
             } else {
                 //TODO: may need to check for a specific node to know that it's passive points and not something in the subtree
-                console.log("__ passive points added!");
-
-                //TODO: trying to figure out when passive points are added and to see how many
+                    //TODO: simple fix would be to check if the element has children
+                //Get pulse animation element
                 const pulseAnimation = mutation.addedNodes[0].querySelector(".pulse-animation");
-                console.log(pulseAnimation);
-                //TODO: keep in mind this still has a "+"" at the front, may affect number conversion?
+                //Retrieve number of channel points earned
                 const pointsAmount = pulseAnimation.querySelector("div.sc-AxjAm.jPJPAu").innerText;
-                console.log(pointsAmount);
+                console.log(+pointsAmount + " passive points added!");
             }
         }
     }
 }
 
 //Options for MutationObserver object
-    //TODO: may need to set this to subtree: true, in order to get the actual nodes I want
 const observerConfig = {childList: true, subtree: true};
 
 //Create MutationObserver
@@ -45,4 +42,4 @@ const observer = new MutationObserver(observerCallback);
 //Observe pointsContainer with specificied configuration
 observer.observe(pointsContainer, observerConfig);
 
-//Use observer.disconnect() to stop listening at some point?
+//TODO: Use observer.disconnect() to stop listening at some point?
