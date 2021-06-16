@@ -27,8 +27,7 @@ const observerCallback = function(mutationsList) {
     }
 }
 
-//TODO: Ensure page has loaded before beginning check
-    //Might be a better way to perform this as an extension
+//Ensure page has loaded before beginning check
 window.onload = initialCheck(); 
 
 function initialCheck() {
