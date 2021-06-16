@@ -56,4 +56,15 @@ function createObserver() {
     observer.observe(pointsContainer, observerConfig);
 }
 
-//TODO: Use observer.disconnect() to stop listening at some point
+//TODO: create pop-up menu for extension controls: https://www.youtube.com/watch?v=YQnRSa8MGwM
+    //TODO: use cookies to track total channel points earned with extension?
+        //Or per session instead to remove storage need?
+            //Both?
+    //TODO: use observer.disconnect() as a button to stop auto-channel points
+    //TODO: debug mode?
+    //TODO: think of more features
+
+//TODO: organise into extension format and create necessary files: https://levelup.gitconnected.com/make-your-first-chrome-extension-with-javascript-7aa383db2b03
+    //TODO: manifest.json
+    //TODO: rename to background.js
+    //TODO: icon.png
