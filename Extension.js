@@ -1,7 +1,7 @@
 //TODO: Debug mode for console logging
 var debugMode = false;
 
-//TODO: Record total amount of points earned in session (i.e. last refresh)
+//Record total amount of points earned in session (i.e. since refresh)
 var sessionPoints = 0;
 
 //Callback function for MutationObserver
@@ -24,8 +24,11 @@ function observerCallback(mutationsList) {
                 const pulseAnimation = mutation.addedNodes[0].querySelector(".pulse-animation");
                 if(pulseAnimation !== undefined) {
                     //Retrieve number of channel points earned
-                    const pointsAmount = pulseAnimation.querySelector("div.sc-AxjAm.jPJPAu").innerText;
-                    console.log(+pointsAmount + " points added!");
+                    const pointsAmount = +pulseAnimation.querySelector("div.sc-AxjAm.jPJPAu").innerText;
+                    //Add points to totals
+                    sessionPoints += pointsAmount;
+                    console.log(pointsAmount + " points added!");
+                    console.log("Points for this session: " + sessionPoints);
                 }
             }
         }
