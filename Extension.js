@@ -65,7 +65,7 @@ function createObserver() {
 
 //TODO: figure out how to get observer here
 function disconnectObserver() {
-    observer.disconnectObserver
+    observer.disconnect()
 }
 
 //TODO: create pop-up menu for extension controls: https://www.youtube.com/watch?v=YQnRSa8MGwM
