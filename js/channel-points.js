@@ -71,12 +71,13 @@ function disconnectObserver() {
     observer.disconnect();
 }
 
-//TODO: create pop-up menu for extension controls: https://www.youtube.com/watch?v=YQnRSa8MGwM
-    //TODO: use cookies to track total channel points earned with extension?
+//TODO: create separate background script and have this become the content script: https://developer.chrome.com/docs/extensions/mv3/content_scripts/
+
+//TODO: create pop-up menu for extension controls: https://www.youtube.com/watch?v=YQnRSa8MGwM https://developer.chrome.com/docs/extensions/mv3/manifest/
+    //TODO: Figure out unloading and if MutationObserver will work https://developer.chrome.com/docs/extensions/mv3/background_pages/
+    //TODO: use cookies to track total channel points earned with extension?: https://developer.chrome.com/docs/extensions/reference/storage/
         //Or per channel (separate number for each channel it's been enabled on)
     //TODO: donation button
 
-//TODO: organise into extension format and create necessary files: https://levelup.gitconnected.com/make-your-first-chrome-extension-with-javascript-7aa383db2b03
-    //TODO: manifest.json
-    //TODO: rename to background.js
-    //TODO: icon.png
+//TODO: create icon https://developer.chrome.com/docs/extensions/mv3/manifest/icons/
+//TODO: create pop-up https://developer.chrome.com/docs/extensions/reference/action/
