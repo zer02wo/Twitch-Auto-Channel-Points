@@ -48,11 +48,11 @@ function initialCheck() {
     }
 
     //Begin observing channel points
-    createObserver();
+    startObserver();
 }
 
-//Set up MutationObserver on points container element 
-function createObserver() {
+//Set up observer to watch for mutations on channel points
+function startObserver() {
     //Get container element for channel points information
     const pointsContainer = document.getElementsByClassName("sc-AxjAm bnsqjT")[0];
 
@@ -63,15 +63,14 @@ function createObserver() {
     observer.observe(pointsContainer, observerConfig);
 }
 
-//TODO: figure out how to get observer here
+//Disconnect observer to stop watching for mutations
 function disconnectObserver() {
-    observer.disconnect()
+    observer.disconnect();
 }
 
 //TODO: create pop-up menu for extension controls: https://www.youtube.com/watch?v=YQnRSa8MGwM
     //TODO: use cookies to track total channel points earned with extension?
         //Or per channel (separate number for each channel it's been enabled on)
-    //TODO: use observer.disconnect() as a button to stop auto-channel points
     //TODO: donation button
 
 //TODO: organise into extension format and create necessary files: https://levelup.gitconnected.com/make-your-first-chrome-extension-with-javascript-7aa383db2b03
