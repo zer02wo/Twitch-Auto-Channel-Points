@@ -1,0 +1,32 @@
+{
+    "manifest_version": 2,
+    "name": "Twitch Auto Channel Points",
+    "short_name": "TTV Points",
+    "version": "1.0",
+    "description": "Automatically redeem channel points on any live Twitch stream.",
+
+    "action": {
+        "default_icon": {
+            "16": "icon16.png",
+            "48": "icon48.png",
+            "128": "icon128.png"
+        },
+        "default_title": "Twitch Auto Channel Points",
+        "default_popup": "popup.html"
+    },
+
+    "permissions": ["scripting"],
+    //TODO: Unsure if I can make this optional and not cause errors.
+    "optional_permissions": ["storage"],
+
+    "background": {
+        "service_worker": "js/background.js"
+    },
+
+    "content_scripts": {
+        "matches": ["*://*.twitch.tv/*"],
+        "exclude_matches": ["*://*.twitch.tv/videos/*"],
+        "js": ["channel-points.js"],
+        "run_at": "document_end"
+    }
+}
