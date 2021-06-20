@@ -1,5 +1,5 @@
 {
-    "manifest_version": 2,
+    "manifest_version": 3,
     "name": "Twitch Auto Channel Points",
     "short_name": "TTV Points",
     "version": "1.0",
@@ -15,18 +15,19 @@
         "default_popup": "popup.html"
     },
 
-    "permissions": ["scripting"],
-    //TODO: Unsure if I can make this optional and not cause errors.
+    "permissions": [],
     "optional_permissions": ["storage"],
 
     "background": {
-        "service_worker": "js/background.js"
+        "service_worker": "background.js"
     },
 
-    "content_scripts": {
-        "matches": ["*://www.twitch.tv/*"],
-        "exclude_matches": ["*://www.twitch.tv/videos/*"],
-        "js": ["channel-points.js"],
-        "run_at": "document_end"
-    }
+    "content_scripts": [
+        {
+            "matches": ["*://www.twitch.tv/*"],
+            "exclude_matches": ["*://www.twitch.tv/videos/*"],
+            "js": ["js/channel-points.js"],
+            "run_at": "document_end"
+        }
+    ]
 }
