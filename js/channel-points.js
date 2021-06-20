@@ -1,5 +1,5 @@
-//TODO: Debug mode for console logging
-var debugMode = false;
+//Debug mode for console logging
+var debugMode = true;
 
 //Record total amount of points earned in session (i.e. since refresh)
 var sessionPoints = 0;
@@ -18,7 +18,8 @@ function observerCallback(mutationsList) {
                 const pointsButton = innerContainer.getElementsByTagName("button")[0];
                 //Click button element to redeem channel points
                 pointsButton.click();
-                console.log("Auto-clicked channel points prompt!")
+                //Log to console when in debug mode
+                debugMode && console.log("Auto-clicked channel points prompt!")
             } else {
                 //Get pulse animation element
                 const pulseAnimation = mutation.addedNodes[0].querySelector(".pulse-animation");
@@ -27,8 +28,8 @@ function observerCallback(mutationsList) {
                     const pointsAmount = +pulseAnimation.querySelector("div.sc-AxjAm.jPJPAu").innerText;
                     //Add points to totals
                     sessionPoints += pointsAmount;
-                    console.log(pointsAmount + " points added!");
-                    console.log("Points for this session: " + sessionPoints);
+                    //Log to console when in debug mode
+                    debugMode && console.log(pointsAmount + " points added!\nPoints for this session: " + sessionPoints);
                 }
             }
         }
