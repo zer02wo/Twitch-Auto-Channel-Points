@@ -39,7 +39,12 @@ function observerCallback(mutationsList) {
 const observer = new MutationObserver(observerCallback);
 
 //Ensure page has loaded before beginning check
-window.onload = initialCheck(); 
+window.onload = setTimeout(function() {
+    //Log to console when in debug mode
+    debugMode && console.log("Twitch Auto Channel Points initialised.");
+    //Wait 5 seconds to allow everything to load
+    initialCheck();
+}, 5000);
 
 //Initial check if channel points button exists before observation
 function initialCheck() {
