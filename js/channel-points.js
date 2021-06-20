@@ -77,12 +77,15 @@ function disconnectObserver() {
     observer.disconnect();
 }
 
+/*var port = chrome.runtime.connect({name: "channel-points"});
+port.postMessage("Insert message here.");
+//Keyword can be anything, used to reference the message
+    //E.g. could do: channel: "Username" and points: "50" 
+port.postMessage({keyword: "Insert message here"});
+port.onMessage.addListener(function(msg) {
+    if(msg.keyword == "Message received") {
+        //Example of using keyword from message
+    }
+});*/
+
 //TODO: Ensure content script operating correctly: https://developer.chrome.com/docs/extensions/mv3/content_scripts/
-
-//TODO: create pop-up menu for extension controls: https://www.youtube.com/watch?v=YQnRSa8MGwM https://developer.chrome.com/docs/extensions/mv3/manifest/
-    //TODO: use storage API to track total channel points earned with extension?: https://developer.chrome.com/docs/extensions/reference/storage/
-        //Or per channel (separate number for each channel it's been enabled on)
-    //TODO: donation button
-
-//TODO: create icon https://developer.chrome.com/docs/extensions/mv3/manifest/icons/
-//TODO: create pop-up https://developer.chrome.com/docs/extensions/reference/action/

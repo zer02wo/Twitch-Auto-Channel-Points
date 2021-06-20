@@ -25,11 +25,3 @@ chrome.runtime.onInstalled.addListener(function(details) {
         }
     });
 });*/
-
-//Create extension pop-up menu
-//TODO: chrome.browserAction.setPopup({popup: 'popup.html'});
-
-//TODO: Manifest comments:
-    //May not need scripting permission
-    //May need tabs permission to check all tabs (in theory should just run on each one?)
-    //Unsure if I can make storage permission optional and not cause errors
