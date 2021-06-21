@@ -4,6 +4,16 @@ var debugMode = true;
 //Record total amount of points earned in session (i.e. since refresh)
 var sessionPoints = 0;
 
+//Set up messaging port for extension scripts
+var port = chrome.runtime.connect({name: "channel-points"});
+//Listen for messages on the port
+port.onMessage.addListener(function(msg) {
+    //TODO: Implement message listening functionality
+    if(msg.keyword == "Message received") {
+        //Example of using keyword from message
+    }
+});
+
 //Callback function for MutationObserver
 function observerCallback(mutationsList) {
     //For each observed mutation
@@ -28,6 +38,9 @@ function observerCallback(mutationsList) {
                     const pointsAmount = +pulseAnimation.querySelector("div.sc-AxjAm.jPJPAu").innerText;
                     //Add points to totals
                     sessionPoints += pointsAmount;
+                    //Send message to background script to update point totals
+                    const username = document.querySelector(".channel-info-content").querySelector("h1").innerText;
+                    port.postMessage({username: username, points: pointsAmount});
                     //Log to console when in debug mode
                     debugMode && console.log(pointsAmount + " points added!\nPoints for this session: " + sessionPoints);
                 }
@@ -79,16 +92,5 @@ function startObserver() {
 function disconnectObserver() {
     observer.disconnect();
 }
-
-/*var port = chrome.runtime.connect({name: "channel-points"});
-port.postMessage("Insert message here.");
-//Keyword can be anything, used to reference the message
-    //E.g. could do: channel: "Username" and points: "50" 
-port.postMessage({keyword: "Insert message here"});
-port.onMessage.addListener(function(msg) {
-    if(msg.keyword == "Message received") {
-        //Example of using keyword from message
-    }
-});*/
 
 //TODO: Ensure content script operating correctly: https://developer.chrome.com/docs/extensions/mv3/content_scripts/
