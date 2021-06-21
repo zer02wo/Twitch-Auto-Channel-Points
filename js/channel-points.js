@@ -39,7 +39,7 @@ function observerCallback(mutationsList) {
                     //Add points to totals
                     sessionPoints += pointsAmount;
                     //Send message to background script to update point totals
-                    const username = document.querySelector(".channel-info-content").querySelector("h1").innerText;
+                    const username = getUsername();
                     port.postMessage({username: username, points: pointsAmount});
                     //Log to console when in debug mode
                     debugMode && console.log(pointsAmount + " points added!\nPoints for this session: " + sessionPoints);
@@ -93,4 +93,19 @@ function disconnectObserver() {
     observer.disconnect();
 }
 
-//TODO: Ensure content script operating correctly: https://developer.chrome.com/docs/extensions/mv3/content_scripts/
+//Get Twitch username as formatted within the URL
+function getUsername() {
+    //Get first part of URL path
+    const initialSplit = window.location.href.split("twitch.tv/")[1];
+    if(initialSplit.includes("/")) {
+        //Remove any subsequent paths
+        return initialSplit.split("/")[0];
+    } else if(initialSplit.includes("?")) {
+        //Remove any query strings
+        return initialSplit.split("?")[0];
+    } else {
+        return initialSplit;
+    }
+}
+
+//TODO: fix bug with port messaging lifetime (disconnects after a while)
