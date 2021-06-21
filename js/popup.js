@@ -6,6 +6,8 @@
     //Reset channel and/or total points
         //Probably just for debugging, but maybe a full feature
 
+//TODO: set popup to something different when not on a live twitch channel
+
 //Send handshake to background script when popup opens
 chrome.runtime.sendMessage({handshake: "initiate"});
 //Listen to receive handshake response from background script
@@ -13,14 +15,18 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     //TODO: set up the popup with this response
         //Get data from messages, organise into local variables, call functions
     if(message.user) {
+        //Initialise main UI elements
         initialiseUI(message.user);
     } else if(message.update) {
+        //Update main UI elements with newest values
         updateUI(message.update);
+    } else if(message.session) {
+        //Update session points UI element with newest value
+        updateUIElementValue("session-points", message.session);
     }
 });
 
-//TODO: when popup isn't opened, port is closed, so onConnect never fires
-    //get everything from content script into background, then pass to popup
+//Initialise UI elements
 function initialiseUI(username) {
     //Check storage permission to allow certain UI elements
     chrome.permissions.contains({
@@ -65,10 +71,9 @@ function initialiseUI(username) {
     });
 
     //TODO: Initialise other UI elements as required
-        //Create session points element in HTML file?
 }
 
-//TODO: create DOM element and display points value
+//Creates point related UI elements, appended to the DOM with updated point values
 function createPointsElement(type, points, username = null) {
     //Get container element to append created elements
     const pointsContainer = document.getElementById("points-container");
@@ -112,14 +117,11 @@ function updateUI(data) {
     });
 }
 
-//TODO: Update points value of UI elements
+//Updates specified points UI element with new value
 function updateUIElementValue(elementId, pointsValue) {
-    //TODO: Finish this
-    console.log("Updating element: " + elementId + " to value: " + pointsValue);
-    /*const element = document.getElementById(elementId);
-    element.innerText = pointsValue;*/
+    const element = document.getElementById(elementId);
+    element.innerText = pointsValue;
 }
-
 
 //Permission request must be contained within user gesture
 document.getElementById("storage-permission").addEventListener("click", function() {

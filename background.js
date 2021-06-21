@@ -25,20 +25,22 @@ chrome.runtime.onConnect.addListener(function(port) {
                 updatePointValues(msg.username, msg.points);
             } else if(msg.user) {
                 //Message contains username to be sent to popup
-                chrome.runtime.sendMessage({user: msg["user"]});
+                chrome.runtime.sendMessage(msg);
+            } else if(msg.session) {
+                //Message contains session points to be sent to popup
+                chrome.runtime.sendMessage(msg);
             }
         });
     });
 
-    //TODO: listen to receive handshake initiation from popup, along with user inputs on popup (i.e. buttons pressed)
+    //Listen to receive handshake initiation and user inputs from popup menu
     chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         //If message is handshake initiation
         if(message.handshake == "initiate") {
             //Initialise the popup by communicating with content script
-            //TODO: query content script for all the data popup needs
-
-            //Response handled in port listener
+            //Responses handled in port message listener
             port.postMessage("getUsername");
+            port.postMessage("getSessionPoints");
         }
     });
 });

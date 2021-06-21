@@ -8,11 +8,13 @@ var sessionPoints = 0;
 var port = chrome.runtime.connect({name: "channel-points"});
 //Listen for messages on the port
 port.onMessage.addListener(function(msg) {
-    //TODO: Implement message listening functionality
     if(msg == "getUsername") {
         //Get Twitch username and return in message
         const username = getUsername();
         port.postMessage({user: username});
+    } else if(msg == "getSessionPoints") {
+        //Return number of points earned this session
+        port.postMessage({session: sessionPoints});
     }
 });
 
@@ -45,7 +47,8 @@ function observerCallback(mutationsList) {
                     port.postMessage({username: username, points: pointsAmount});
                     //Log to console when in debug mode
                     debugMode && console.log(pointsAmount + " points added!\nPoints for this session: " + sessionPoints);
-                    //TODO: send message to background to update popup with session points
+                    //Send message to background to update popup with session points
+                    port.postMessage({session: sessionPoints});
                 }
             }
         }
