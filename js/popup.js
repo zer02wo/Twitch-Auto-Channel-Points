@@ -36,12 +36,12 @@ function initialiseUI(username) {
                     chrome.storage.sync.set({"_total": 0}, function() {
                         console.log("Total channel points initialised to 0");
                         //Create total points UI element
-                        createTotalPointsElement(0);
+                        createPointsElement("total", 0);
                     });
                 } else {
                     //Create total points UI element based on stored value
                     let totalPoints = res["_total"];
-                    createTotalPointsElement(totalPoints);
+                    createPointsElement("total", totalPoints);
                 }
             });
 
@@ -53,12 +53,12 @@ function initialiseUI(username) {
                     chrome.storage.sync.set({[username]: 0}, function() {
                         console.log(username + " channel points initialised to 0");
                         //Create channel points UI element
-                        createChannelPointsElement(username, 0);
+                        createPointsElement("channel", 0, username);
                     });
                 } else {
                     //Create channel points UI element based on stored value
                     let channelPoints = res[username];
-                    createChannelPointsElement(username, channelPoints);
+                    createPointsElement("channel", channelPoints, username);
                 }
             });
         }
@@ -69,13 +69,31 @@ function initialiseUI(username) {
 }
 
 //TODO: create DOM element and display points value
-function createTotalPointsElement(pointsValue) {
-    console.log("Total points:" + pointsValue);
-}
-
-//TODO: create DOM element and display channel name and points value
-function createChannelPointsElement(username, pointsValue) {
-    console.log(username + " channel points: " + pointsValue);
+function createPointsElement(type, points, username = null) {
+    //Get container element to append created elements
+    const pointsContainer = document.getElementById("points-container");
+    //Create container element
+    const pointsDisplay = document.createElement("div");
+    pointsDisplay.id = type + "-display";
+    pointsDisplay.className = "points-display";
+    pointsContainer.appendChild(pointsDisplay);
+    //Create title/description element
+    const pointsTitle = document.createElement("p");
+    pointsTitle.id = type + "-title";
+    pointsTitle.className = "points-title";
+    //Set description based on optional parameter
+    if(username == null) {
+        pointsTitle.innerText = "Total points earned:";
+    } else {
+        pointsTitle.innerText = "Points earned for " + username + ":";
+    }
+    pointsDisplay.appendChild(pointsTitle);
+    //Create points value element
+    const pointsValue = document.createElement("p");
+    pointsValue.id = type + "-points";
+    pointsValue.className = "points-value";
+    pointsValue.innerText = points;
+    pointsDisplay.appendChild(pointsValue);
 }
 
 function updateUI(data) {
