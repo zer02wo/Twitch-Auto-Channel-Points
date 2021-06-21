@@ -7,12 +7,19 @@
 </head>
 <body>
     <h1>Twitch Auto Channel Points</h1>
-    <button id="on-off">On/Off</button>
-    <button id="storage-permission">Set Storage Permission</button>
-    <button id="debug">Debug Mode</button>
-    <button id="reset-channel">Reset Channel Counter</button>
-    <button id="reset-total">Reset Total Counter</button>
-    <button id="donate">Donate</button>
-    <script src="js/popup.js"></script>
+    <div id="points-container">
+        <div id="session-display" class="points-display">
+            <p id="session-title" class="points-title">Points earned this session:</p><p id="session-points" class="points-value">0</p>
+        </div>
+    </div>
+    <div id="extension-controls">
+        <button id="on-off" class="extension-control">On/Off</button>
+        <button id="storage-permission" class="extension-control">Set Storage Permission</button>
+        <button id="debug" class="extension-control">Debug Mode</button>
+        <button id="reset-channel" class="extension-control">Reset Channel Counter</button>
+        <button id="reset-total" class="extension-control">Reset Total Counter</button>
+        <button id="donate" class="extension-control">Donate</button>
+        <script src="js/popup.js"></script>
+    </div>
 </body>
 </html>

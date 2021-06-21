@@ -1,0 +1,9 @@
+body {
+    width: 360px;
+}
+
+.points-display {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
