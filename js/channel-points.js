@@ -22,8 +22,8 @@ function observerCallback(mutationsList) {
                 debugMode && console.log("Auto-clicked channel points prompt!")
             } else {
                 //Get pulse animation element
-                const pulseAnimation = mutation.addedNodes[0].querySelector(".pulse-animation");
-                if(pulseAnimation !== undefined) {
+                const pulseAnimation = innerContainer.querySelector(".pulse-animation");
+                if(pulseAnimation !== null) {
                     //Retrieve number of channel points earned
                     const pointsAmount = +pulseAnimation.querySelector("div.sc-AxjAm.jPJPAu").innerText;
                     //Add points to totals
@@ -50,10 +50,13 @@ window.onload = setTimeout(function() {
 //Initial check if channel points button exists before observation
 function initialCheck() {
     //Check if container element has points redeem button
-    const pointsCheck = document.getElementsByClassName("sc-AxjAm bnsqjT")[0].querySelector("button");
-    if(pointsCheck !== null) {
-        //Click button to redeem channel points
-        pointsCheck.click();
+    const pointsCheck = document.getElementsByClassName("sc-AxjAm bnsqjT")[0];
+    if(pointsCheck !== undefined) {
+        const pointsButton = pointsCheck.querySelector("button");
+        if(pointsButton !== null) {
+            //Click button to redeem channel points
+            pointsButton.click();
+        }
     }
 
     //Begin observing channel points
