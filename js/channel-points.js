@@ -98,9 +98,22 @@ function startObserver() {
     observer.observe(pointsContainer, observerConfig);
 }
 
-//Disconnect observer to stop watching for mutations
-function disconnectObserver() {
-    observer.disconnect();
+//Toggle observer to start/stop watching for mutations
+function toggleObserver() {
+    //If observer is watching for mutations
+    if(isObserving) {
+        //Disconnect and update state
+        observer.disconnect();
+        isObserving = false;
+        debugMode && console.log("Auto-clicker is now off.");
+    } else {
+        //Start observer and update state
+        startObserver();
+        isObserving = true;
+        debugMode && console.log("Auto-clicker is now on.");
+    }
+    //Return observer state as a string value for popup
+    return getStateString(isObserving);
 }
 
 //Get Twitch username as formatted within the URL
