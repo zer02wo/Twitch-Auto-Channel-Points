@@ -143,6 +143,11 @@ function updateButtonState(buttonId, state) {
 }
 
 function setButtonListeners() {
+    //Toggle auto-clicker. Listen for click on button.
+    document.getElementById("on-off").addEventListener("click", function() {
+        chrome.runtime.sendMessage({observer: "toggle"});
+    });
+
     //Permission request must be contained within user gesture. Listen for click on button.
     document.getElementById("storage-permission").addEventListener("click", function() {
         chrome.permissions.request({
