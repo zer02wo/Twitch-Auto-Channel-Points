@@ -112,7 +112,7 @@ function toggleObserver() {
         debugMode && console.log("Auto-clicker is now off.");
     } else {
         //Start observer and update state
-        startObserver();
+        initialCheck();
         isObserving = true;
         debugMode && console.log("Auto-clicker is now on.");
     }
