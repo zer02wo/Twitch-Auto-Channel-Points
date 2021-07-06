@@ -126,12 +126,12 @@ function toggleDebug() {
     return getDebugState();
 }
 
-//Get state of debug mode
-function getDebugState() {
+//Get state string from boolean
+function getStateString(boolean) {
     //Return state string from boolean value
-    if(debugMode === true) {
+    if(boolean) {
         return "active";
-    } else if(debugMode === false) {
+    } else {
         return "inactive";
     }
 }
