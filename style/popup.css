@@ -7,3 +7,10 @@ body {
     align-items: center;
     justify-content: start;
 }
+
+.extension-control.active {
+    border: solid 1px blue;
+}
+.extension-control.inactive {
+    border: solid 1px red;
+}

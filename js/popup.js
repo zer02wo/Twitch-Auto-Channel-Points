@@ -126,6 +126,19 @@ function updateUIElementValue(elementId, pointsValue) {
     element.innerText = pointsValue;
 }
 
+//Updates specified button element with new state
+function updateButtonState(buttonId, state) {
+    const button = document.getElementById(buttonId);
+    //TODO: may need to add more states in the future
+    if(state == "active") {
+        button.classList.add("active");
+        button.classList.remove("inactive");
+    } else {
+        button.classList.add("inactive");
+        button.classList.remove("active");
+    }
+}
+
 function setButtonListeners() {
     //Permission request must be contained within user gesture. Listen for click on button.
     document.getElementById("storage-permission").addEventListener("click", function() {
