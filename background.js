@@ -23,17 +23,14 @@ chrome.runtime.onConnect.addListener(function(port) {
             if(isGranted && msg.username && msg.points) {
                 //Message contains username and points, update values
                 updatePointValues(msg.username, msg.points);
-            } else if(msg.user) {
-                //Message contains username to be sent to popup
-                chrome.runtime.sendMessage(msg);
-            } else if(msg.session) {
-                //Message contains session points to be sent to popup
+            } else if(isGranted && msg.user) {
+                //Message contains storage related information to be sent to popup
                 chrome.runtime.sendMessage(msg);
             }
         });
         //Chrome doesn't require storage permissions
-        if(msg.debug) {
-            //Message contains debug state to be sent to popup
+        if(msg.session || msg.debug) {
+            //Message contains information to be sent to popup
             chrome.runtime.sendMessage(msg);
         }
     });
