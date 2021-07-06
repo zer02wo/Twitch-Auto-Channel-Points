@@ -1,8 +1,4 @@
 //TODO: add functions:
-    //Toggle debug mode
-    //Toggle observation on/off
-    //Ko-Fi donation button
-    //Display per channel and overall total (and session) points
     //Reset channel and/or total points
         //Probably just for debugging, but maybe a full feature
 
@@ -26,6 +22,9 @@ chrome.runtime.onMessage.addListener(function(message) {
     } else if(message.debug) {
         //Update debug button with newest state
         updateButtonState("debug", message.debug);
+    } else if(message.observer) {
+        //Update on-off button with newest state
+        updateButtonState("on-off", message.observer);
     }
 });
 

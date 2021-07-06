@@ -1,6 +1,7 @@
 //Debug mode for console logging
 var debugMode = true;
-
+//Mutation observer state
+var isObserving = true;
 //Record total amount of points earned in session (i.e. since refresh)
 var sessionPoints = 0;
 
@@ -19,6 +20,9 @@ port.onMessage.addListener(function(msg) {
         //TODO: return debug state
         const debugState = toggleDebug();
         port.postMessage({debug: debugState});
+    } else if(msg == "toggleObserver") {
+        const observerState = toggleObserver();
+        port.postMessage({observer: observerState});
     }
 });
 
@@ -37,7 +41,7 @@ function observerCallback(mutationsList) {
                 //Click button element to redeem channel points
                 pointsButton.click();
                 //Log to console when in debug mode
-                debugMode && console.log("Auto-clicked channel points prompt!")
+                debugMode && console.log("Auto-clicked channel points prompt!");
             } else {
                 //Get pulse animation element
                 const pulseAnimation = innerContainer.querySelector(".pulse-animation");
@@ -136,7 +140,8 @@ function toggleDebug() {
     //Set debug mode to opposite of current state
     debugMode = !debugMode;
     console.log("Debug mode set to: " + debugMode);
-    return getDebugState();
+    //Return debug state as a string value for popup
+    return getStateString(debugMode);
 }
 
 //Get state string from boolean

@@ -29,7 +29,7 @@ chrome.runtime.onConnect.addListener(function(port) {
             }
         });
         //Chrome doesn't require storage permissions
-        if(msg.session || msg.debug) {
+        if(msg.session || msg.debug || msg.observer) {
             //Message contains information to be sent to popup
             chrome.runtime.sendMessage(msg);
         }
@@ -46,6 +46,9 @@ chrome.runtime.onConnect.addListener(function(port) {
         } else if(message.debug == "toggle") {
             //Toggle debug state by communicating with content script
             port.postMessage("toggleDebug");
+        } else if(message.observer == "toggle") {
+            //Toggle observer state by communicating with content script
+            port.postMessage("toggleObserver");
         }
     });
 });
