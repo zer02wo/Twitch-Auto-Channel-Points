@@ -31,16 +31,24 @@ chrome.runtime.onConnect.addListener(function(port) {
                 chrome.runtime.sendMessage(msg);
             }
         });
+        //Chrome doesn't require storage permissions
+        if(msg.debug) {
+            //Message contains debug state to be sent to popup
+            chrome.runtime.sendMessage(msg);
+        }
     });
 
     //Listen to receive handshake initiation and user inputs from popup menu
-    chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+    //Responses handled in port message listener
+    chrome.runtime.onMessage.addListener(function(message) {
         //If message is handshake initiation
         if(message.handshake == "initiate") {
             //Initialise the popup by communicating with content script
-            //Responses handled in port message listener
             port.postMessage("getUsername");
             port.postMessage("getSessionPoints");
+        } else if(message.debug == "toggle") {
+            //Toggle debug state by communicating with content script
+            port.postMessage("toggleDebug");
         }
     });
 });

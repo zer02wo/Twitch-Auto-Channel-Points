@@ -15,6 +15,10 @@ port.onMessage.addListener(function(msg) {
     } else if(msg == "getSessionPoints") {
         //Return number of points earned this session
         port.postMessage({session: sessionPoints});
+    } else if(msg == "toggleDebug") {
+        //TODO: return debug state
+        const debugState = toggleDebug();
+        port.postMessage({debug: debugState});
     }
 });
 
@@ -111,6 +115,24 @@ function getUsername() {
         return initialSplit.split("?")[0];
     } else {
         return initialSplit;
+    }
+}
+
+//Toggle state of debug mode
+function toggleDebug() {
+    //Set debug mode to opposite of current state
+    debugMode = !debugMode;
+    console.log("Debug mode set to: " + debugMode);
+    return getDebugState();
+}
+
+//Get state of debug mode
+function getDebugState() {
+    //Return state string from boolean value
+    if(debugMode === true) {
+        return "active";
+    } else if(debugMode === false) {
+        return "inactive";
     }
 }
 
