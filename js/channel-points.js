@@ -17,7 +17,6 @@ port.onMessage.addListener(function(msg) {
         //Return number of points earned this session
         port.postMessage({session: sessionPoints});
     } else if(msg == "toggleDebug") {
-        //TODO: return debug state
         const debugState = toggleDebug();
         port.postMessage({debug: debugState});
     } else if(msg == "toggleObserver") {
