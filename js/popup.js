@@ -23,6 +23,9 @@ chrome.runtime.onMessage.addListener(function(message) {
     } else if(message.session) {
         //Update session points UI element with newest value
         updateUIElementValue("session-points", message.session);
+    } else if(message.debug) {
+        //Update debug button with newest state
+        updateButtonState("debug", message.debug);
     }
 });
 
