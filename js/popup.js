@@ -11,7 +11,7 @@
 //Send handshake to background script when popup opens
 chrome.runtime.sendMessage({handshake: "initiate"});
 //Listen to receive handshake response from background script
-chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function(message) {
     //TODO: set up the popup with this response
         //Get data from messages, organise into local variables, call functions
     if(message.user) {
@@ -69,8 +69,11 @@ function initialiseUI(username) {
             });
         }
     });
-
+    //TODO: need to get state (i.e. on/off) of buttons on initial call
     //TODO: Initialise other UI elements as required
+        //If no storage permission, remove the storage related buttons
+            //Alternatively grey them out and alert user to set storage permissions instead?
+    setButtonListeners();
 }
 
 //Creates point related UI elements, appended to the DOM with updated point values
@@ -123,20 +126,26 @@ function updateUIElementValue(elementId, pointsValue) {
     element.innerText = pointsValue;
 }
 
-//Permission request must be contained within user gesture
-document.getElementById("storage-permission").addEventListener("click", function() {
-    chrome.permissions.request({
-        permissions: ["storage"],
-        origins: ["https://www.twitch.tv/*"],
-
-    }, function(isGranted) {
-        //User grants permission
-        if(isGranted) {
-            //TODO: set up storage
-            console.log("Permission granted!");
-        } else {
-            //TODO: prepare to not use storage
-            console.log("Permission denied!");
-        }
+function setButtonListeners() {
+    //Permission request must be contained within user gesture. Listen for click on button.
+    document.getElementById("storage-permission").addEventListener("click", function() {
+        chrome.permissions.request({
+            permissions: ["storage"],
+            origins: ["https://www.twitch.tv/*"]
+        }, function(isGranted) {
+            //User grants permission
+            if(isGranted) {
+                //TODO: set up storage
+                console.log("Permission granted!");
+            } else {
+                //TODO: prepare to not use storage
+                console.log("Permission denied!");
+            }
+        });
     });
-});
+
+    //Toggle debug mode. Listen for click on button.
+    document.getElementById("debug").addEventListener("click", function() {
+        chrome.runtime.sendMessage({debug: "toggle"});
+    });
+}
