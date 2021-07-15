@@ -9,19 +9,26 @@ var sessionPoints = 0;
 var port = chrome.runtime.connect({name: "channel-points"});
 //Listen for messages on the port
 port.onMessage.addListener(function(msg) {
-    if(msg == "getUsername") {
-        //Get Twitch username and return in message
-        const username = getUsername();
-        port.postMessage({user: username});
-    } else if(msg == "getSessionPoints") {
-        //Return number of points earned this session
-        port.postMessage({session: sessionPoints});
-    } else if(msg == "toggleDebug") {
-        const debugState = toggleDebug();
-        port.postMessage({debug: debugState});
-    } else if(msg == "toggleObserver") {
-        const observerState = toggleObserver();
-        port.postMessage({observer: observerState});
+    switch(msg) {
+        case "getUsername":
+            //Get Twitch username and return in message
+            const username = getUsername();
+            port.postMessage({user: username});
+            break;
+        case "getSessionPoints":
+            //Return number of points earned this session
+            port.postMessage({session: sessionPoints});
+            break;
+        case "toggleDebug":
+            //Toggle debugging state and return new state
+            const debugState = toggleDebug();
+            port.postMessage({debug: debugState});
+            break;
+        case "toggleObserver":
+            //Toggle auto-click on or off by toggling observation state
+            const observerState = toggleObserver();
+            port.postMessage({observer: observerState});
+            break;
     }
 });
 
