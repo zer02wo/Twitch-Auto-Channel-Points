@@ -29,6 +29,9 @@ port.onMessage.addListener(function(msg) {
             const observerState = toggleObserver();
             port.postMessage({observer: observerState});
             break;
+        default:
+            //Log any unexpected messages when in debug mode
+            debugMode && console.log("Unexpected message received: " + msg);
     }
 });
 
