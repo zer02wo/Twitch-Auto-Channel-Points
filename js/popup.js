@@ -3,13 +3,12 @@
         //Probably just for debugging, but maybe a full feature
 
 //TODO: set popup to something different when not on a live twitch channel
+    //Replace with entirely different HTML file if possible? (Keep donation button and same style on this)
 
-//Send handshake to background script when popup opens
-chrome.runtime.sendMessage({handshake: "initiate"});
-//Listen to receive handshake response from background script
+//Initiate communication between popup and content script
+initiateHandshake();
+//Listen to receive response from content script
 chrome.runtime.onMessage.addListener(function(message) {
-    //TODO: set up the popup with this response
-        //Get data from messages, organise into local variables, call functions
     if(message.user) {
         //Initialise main UI elements
         initialiseUI(message.user);
@@ -27,6 +26,16 @@ chrome.runtime.onMessage.addListener(function(message) {
         updateButtonState("on-off", message.observer);
     }
 });
+
+//Send initial messages to content script when popup opens
+function initiateHandshake() {
+    //Get current tab to query content script for information
+    getCurrentTab().then(curTab => {
+        //Initialise the popup by communicating with content script
+        chrome.tabs.sendMessage(curTab.id, "getUsername");
+        chrome.tabs.sendMessage(curTab.id, "getSessionPoints");
+    });
+}
 
 //Initialise UI elements
 function initialiseUI(username) {
@@ -73,8 +82,6 @@ function initialiseUI(username) {
     });
     //TODO: need to get state (i.e. on/off) of buttons on initial call
     //TODO: Initialise other UI elements as required
-        //If no storage permission, remove the storage related buttons
-            //Alternatively grey them out and alert user to set storage permissions instead?
     setButtonListeners();
 }
 
@@ -141,15 +148,41 @@ function updateButtonState(buttonId, state) {
     }
 }
 
+//Set event listeners for button controls in popup
 function setButtonListeners() {
     //Toggle auto-clicker. Listen for click on button.
     document.getElementById("on-off").addEventListener("click", function() {
-        chrome.runtime.sendMessage({observer: "toggle"});
+        //TODO: NEED TO USE STORAGE TO KEEP THESE IN SYNC
+        getTwitchTabs().then(ttvTabs => {
+            ttvTabs.forEach(tab => {
+                chrome.tabs.sendMessage(tab.id, "toggleDebug");
+            });
+        });
     });
-
 
     //Toggle debug mode. Listen for click on button.
     document.getElementById("debug").addEventListener("click", function() {
-        chrome.runtime.sendMessage({debug: "toggle"});
+        //TODO: NEED TO USE STORAGE TO KEEP THESE IN SYNC
+        getTwitchTabs().then(ttvTabs => {
+            ttvTabs.forEach(tab => {
+                chrome.tabs.sendMessage(tab.id, "toggleDebug");
+            });
+        });
     });
+}
+
+//Get current active browser tab
+async function getCurrentTab() {
+    //Destructure assign to get first value of array
+    let [curTab] = await chrome.tabs.query({active: true, currentWindow: true, url: "*://*.twitch.tv/*"});
+    //Return value after promise is resolved
+    return curTab;
+}
+
+//Get all instances of Twitch tabs
+async function getTwitchTabs() {
+    //Query chrome for all tabs related to Twitch.tv
+    let tabs = await chrome.tabs.query({url: "*://*.twitch.tv/*"});
+    //Return array of tabs after promise resolves
+    return tabs;
 }

@@ -1,3 +1,4 @@
+//TODO: set these to false by default, then query background script to get the actual value from storage???
 //Debug mode for console logging
 var debugMode = true;
 //Mutation observer state
@@ -5,29 +6,27 @@ var isObserving = true;
 //Record total amount of points earned in session (i.e. since refresh)
 var sessionPoints = 0;
 
-//Set up messaging port for extension scripts
-var port = chrome.runtime.connect({name: "channel-points"});
-//Listen for messages on the port
-port.onMessage.addListener(function(msg) {
+//Listen for messages from extension scripts
+chrome.runtime.onMessage.addListener(function(msg) {
     switch(msg) {
         case "getUsername":
             //Get Twitch username and return in message
             const username = getUsername();
-            port.postMessage({user: username});
+            chrome.runtime.sendMessage({user: username});
             break;
         case "getSessionPoints":
             //Return number of points earned this session
-            port.postMessage({session: sessionPoints});
+            chrome.runtime.sendMessage({session: sessionPoints});
             break;
         case "toggleDebug":
             //Toggle debugging state and return new state
             const debugState = toggleDebug();
-            port.postMessage({debug: debugState});
+            chrome.runtime.sendMessage({debug: debugState});
             break;
         case "toggleObserver":
             //Toggle auto-click on or off by toggling observation state
             const observerState = toggleObserver();
-            port.postMessage({observer: observerState});
+            chrome.runtime.sendMessage({observer: observerState});
             break;
         default:
             //Log any unexpected messages when in debug mode
@@ -61,11 +60,11 @@ function observerCallback(mutationsList) {
                     sessionPoints += pointsAmount;
                     //Send message to background script to update point totals
                     const username = getUsername();
-                    port.postMessage({username: username, points: pointsAmount});
+                    chrome.runtime.sendMessage({username: username, points: pointsAmount});
                     //Log to console when in debug mode
                     debugMode && console.log(pointsAmount + " points added!\nPoints for this session: " + sessionPoints);
                     //Send message to background to update popup with session points
-                    port.postMessage({session: sessionPoints});
+                    chrome.runtime.sendMessage({session: sessionPoints});
                 }
             }
         }
@@ -81,10 +80,12 @@ window.onload = setTimeout(function() {
     debugMode && console.log("Twitch Auto Channel Points initialised.");
     //Wait 10 seconds to allow everything to load
     initialCheck();
+    //TODO: figure out more efficient method, maybe keep checking for specific element every 0.5s until it appears?
 }, 10000);
 
 //Initial check if channel points button exists before observation
 function initialCheck() {
+    //TODO: change this to a contains check instead?
     //Check if container element has points redeem button
     const pointsCheck = document.getElementsByClassName("sc-AxjAm bnsqjT")[0];
     if(pointsCheck !== undefined) {
@@ -163,4 +164,5 @@ function getStateString(boolean) {
     }
 }
 
-//TODO: fix bug with port messaging lifetime (disconnects after a while)
+//TODO: FIX BUG WHEN CHANGING CHANNELS (i.e. clicking usernames) (ALSO RAIDING)
+    //Need to re-perform initial check? More complex than this?

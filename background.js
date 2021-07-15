@@ -3,56 +3,21 @@ chrome.runtime.onInstalled.addListener(function(details) {
     //TODO: figure out what actions need to be performed
     if(details.reason == "install") {
         //Perform some action
+        //TODO: set debugMode to false by default (can set to false)
+        //TODO: set extension to by on by default (can set to off)
     } else if(details.reason == "update") {
         //Perform other action
     }
 });
 
-//Connect to messaging port to communicate with content script
-chrome.runtime.onConnect.addListener(function(port) {
-    //Writes error message to console if port doesn't match
-    console.assert(port.name === "channel-points");
-    //Sets up listener to port
-    port.onMessage.addListener(function(msg) {
-        //Check if chrome has storage permissions to perform certain operations
-        chrome.permissions.contains({
-            permissions: ['storage'],
-            origins: ["https://www.twitch.tv/*"]
-        }, function(isGranted) {
-            //Chrome has storage permissions
-            if(isGranted && msg.username && msg.points) {
-                //Message contains username and points, update values
-                updatePointValues(msg.username, msg.points);
-            } else if(isGranted && msg.user) {
-                //Message contains storage related information to be sent to popup
-                chrome.runtime.sendMessage(msg);
-            }
-        });
-        //Chrome doesn't require storage permissions
-        if(msg.session || msg.debug || msg.observer) {
-            //Message contains information to be sent to popup
-            chrome.runtime.sendMessage(msg);
-        }
-    });
-
-    //Listen to receive handshake initiation and user inputs from popup menu
-    //Responses handled in port message listener
-    chrome.runtime.onMessage.addListener(function(message) {
-        //If message is handshake initiation
-        if(message.handshake == "initiate") {
-            //Initialise the popup by communicating with content script
-            port.postMessage("getUsername");
-            port.postMessage("getSessionPoints");
-        } else if(message.debug == "toggle") {
-            //Toggle debug state by communicating with content script
-            port.postMessage("toggleDebug");
-        } else if(message.observer == "toggle") {
-            //Toggle observer state by communicating with content script
-            port.postMessage("toggleObserver");
-        }
-    });
+//Listen to receive updated points information from content script
+chrome.runtime.onMessage.addListener(function(msg) {
+    //Listen for message
+    if(msg.username && msg.points) {
+        //Message contains username and points, update values in storage
+        updatePointValues(msg.username, msg.points);
+    }
 });
-
 
 function updatePointValues(username, pointsValue) {
     //Message regarding an update in channel points
@@ -65,7 +30,7 @@ function updatePointValues(username, pointsValue) {
                 console.log(username + " channel points initialised to: " + pointsValue);
             });
         } else {
-            //Calculate totoal points for channel by adding increase to current total
+            //Calculate total points for channel by adding increase to current total
             const newPoints = pointsValue + res[username];
             //Update new total points for channel in storage
             chrome.storage.sync.set({[username]: newPoints }, function () {
