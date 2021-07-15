@@ -147,22 +147,6 @@ function setButtonListeners() {
         chrome.runtime.sendMessage({observer: "toggle"});
     });
 
-    //Permission request must be contained within user gesture. Listen for click on button.
-    document.getElementById("storage-permission").addEventListener("click", function() {
-        chrome.permissions.request({
-            permissions: ["storage"],
-            origins: ["https://www.twitch.tv/*"]
-        }, function(isGranted) {
-            //User grants permission
-            if(isGranted) {
-                //TODO: set up storage
-                console.log("Permission granted!");
-            } else {
-                //TODO: prepare to not use storage
-                console.log("Permission denied!");
-            }
-        });
-    });
 
     //Toggle debug mode. Listen for click on button.
     document.getElementById("debug").addEventListener("click", function() {
