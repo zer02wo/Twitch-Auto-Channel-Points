@@ -3,8 +3,8 @@ chrome.runtime.onInstalled.addListener(function(details) {
     //TODO: figure out what actions need to be performed
     if(details.reason == "install") {
         //Perform some action
-        //TODO: set debugMode to false by default (can set to false)
-        //TODO: set extension to by on by default (can set to off)
+        //TODO: set debugMode to on by default (can set to false)
+        //TODO: set extension to on by default (can set to off)
     } else if(details.reason == "update") {
         //Perform other action
     }
@@ -33,7 +33,7 @@ function updatePointValues(username, pointsValue) {
             //Calculate total points for channel by adding increase to current total
             const newPoints = pointsValue + res[username];
             //Update new total points for channel in storage
-            chrome.storage.sync.set({[username]: newPoints }, function () {
+            chrome.storage.sync.set({[username]: newPoints}, function () {
                 console.log(username + " channel points increased now totalling: " + newPoints);
             });
         }

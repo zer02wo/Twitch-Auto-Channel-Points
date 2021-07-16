@@ -56,6 +56,9 @@ function observerCallback(mutationsList) {
                 if(pulseAnimation !== null) {
                     //Retrieve number of channel points earned
                     const pointsAmount = +pulseAnimation.querySelector("div.sc-AxjAm.jPJPAu").innerText;
+                    //TODO: Test to see if channel point bets are different format (i.e. 4.5K, 6.7M, etc)
+                        //Should passive points and betting even be counted anyway? Only count on the auto click?
+                        //Does betting also subtract points if losing?
                     //Add points to totals
                     sessionPoints += pointsAmount;
                     //Send message to background script to update point totals
