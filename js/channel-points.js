@@ -72,30 +72,38 @@ function observerCallback(mutationsList) {
 //Create global MutationObserver
 const observer = new MutationObserver(observerCallback);
 
-//Ensure page has loaded before beginning check
-window.onload = setTimeout(function() {
-    //Log to console when in debug mode
-    debugMode && console.log("Twitch Auto Channel Points initialised.");
-    //Wait 10 seconds to allow everything to load
-    initialCheck();
-    //TODO: figure out more efficient method, maybe keep checking for specific element every 0.5s until it appears?
-}, 10000);
+window.onload = function() {
+    var interval = setInterval(function() {
+        //Returns true when required DOM element loads
+        if(initialCheck()) {
+            //Log to console regardless of debug mode
+            console.log("Twitch Auto Channel Points initialised.");
+            //Stop interval function from repeating any further
+            clearInterval(interval);
+            //TODO: also send message to background script to initialise debugMode and isOperating from storage
+        }
+        //Attempt to initialise extension every 250ms
+    }, 250);
+}
 
 //Initial check if channel points button exists before observation
 function initialCheck() {
-    //TODO: change this to a contains check instead?
-    //Check if container element has points redeem button
+    //Check if container element exists
     const pointsCheck = document.getElementsByClassName("sc-AxjAm bnsqjT")[0];
     if(pointsCheck !== undefined) {
+        //Begin observing channel points
+        startObserver();
+        //Check if container element has points redeem button
         const pointsButton = pointsCheck.querySelector("button");
         if(pointsButton !== null) {
             //Click button to redeem channel points
             pointsButton.click();
         }
+        return true;
+    } else {
+        //Container element does not exist
+        return false;
     }
-
-    //Begin observing channel points
-    startObserver();
 }
 
 //Set up observer to watch for mutations on channel points
