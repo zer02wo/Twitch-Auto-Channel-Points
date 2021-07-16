@@ -46,13 +46,13 @@ function initialiseUI(username) {
             //Create initial storage and set to 0
             chrome.storage.sync.set({"_total": 0}, function() {
                 console.log("Total channel points initialised to 0");
-                //Create total points UI element
-                createPointsElement("total", 0);
+                //Update total points UI element
+                document.getElementById("total-points").innerText = 0;
             });
         } else {
-            //Create total points UI element based on stored value
+            //Update total points UI element based on stored value
             let totalPoints = res["_total"];
-            createPointsElement("total", totalPoints);
+            document.getElementById("total-points").innerText = totalPoints;
         }
     });
 
@@ -63,14 +63,16 @@ function initialiseUI(username) {
             //Create initial storage and set to 0
             chrome.storage.sync.set({[username]: 0}, function() {
                 console.log(username + " channel points initialised to 0");
-                //Create channel points UI element
-                createPointsElement("channel", 0, username);
+                //Update channel points UI element
+                document.getElementById("channel-points").innerText = "0";
             });
         } else {
-            //Create channel points UI element based on stored value
+            //Update channel points UI element based on stored value
             let channelPoints = res[username];
-            createPointsElement("channel", channelPoints, username);
+            document.getElementById("channel-points").innerText = channelPoints;
         }
+        //Append username to channel title element
+        document.getElementById("channel-title").innerText += " " + username + ":";
     });
     
     //Set visual state of buttons from storage
@@ -78,34 +80,6 @@ function initialiseUI(username) {
     setButtonStateFromStorage("_dbg", "debug");
     //Set listener events for buttons
     setButtonListeners();
-}
-
-//Creates point related UI elements, appended to the DOM with updated point values
-function createPointsElement(type, points, username = null) {
-    //Get container element to append created elements
-    const pointsContainer = document.getElementById("points-container");
-    //Create container element
-    const pointsDisplay = document.createElement("div");
-    pointsDisplay.id = type + "-display";
-    pointsDisplay.className = "points-display";
-    pointsContainer.appendChild(pointsDisplay);
-    //Create title/description element
-    const pointsTitle = document.createElement("p");
-    pointsTitle.id = type + "-title";
-    pointsTitle.className = "points-title";
-    //Set description based on optional parameter
-    if(username == null) {
-        pointsTitle.innerText = "Total points earned:";
-    } else {
-        pointsTitle.innerText = "Points earned for " + username + ":";
-    }
-    pointsDisplay.appendChild(pointsTitle);
-    //Create points value element
-    const pointsValue = document.createElement("p");
-    pointsValue.id = type + "-points";
-    pointsValue.className = "points-value";
-    pointsValue.innerText = points;
-    pointsDisplay.appendChild(pointsValue);
 }
 
 function updateUI(data) {
