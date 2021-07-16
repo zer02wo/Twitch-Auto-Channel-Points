@@ -153,7 +153,7 @@ function setButtonListeners(username) {
         updateStorageAndSend("_dbg", "toggleDebug");
     });
 
-    //Reset the points counter for current channel. Listen for click on button.
+    //Reset points counter for current channel. Listen for click on button.
     document.getElementById("reset-channel").addEventListener("click", function() {
         //Set points value to 0
         chrome.storage.sync.set({[username]: 0}, function() {
@@ -162,6 +162,18 @@ function setButtonListeners(username) {
             updateUI({username: username});
         });
     });
+
+    //Reset points counter for total points. Listen for click on button.
+    document.getElementById("reset-total").addEventListener("click", function() {
+        //Set points value to 0
+        chrome.storage.sync.set({"_total": 0}, function() {
+            console.log("Reset total points count");
+            //Update UI to reflect reset value
+            updateUI({username: username});
+        })
+    })
+
+    //TODO: add some sort of confirmation prompt to the reset buttons?
 }
 
 //Update stored object with id and run function by name in content script
