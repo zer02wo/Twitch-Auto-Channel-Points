@@ -1,8 +1,7 @@
-//TODO: set these to false by default, then query background script to get the actual value from storage???
 //Debug mode for console logging
-var debugMode = true;
+var debugMode = false;
 //Mutation observer state
-var isObserving = true;
+var isObserving = false;
 //Record total amount of points earned in session (i.e. since refresh)
 var sessionPoints = 0;
 
@@ -78,9 +77,10 @@ window.onload = function() {
         if(initialCheck()) {
             //Log to console regardless of debug mode
             console.log("Twitch Auto Channel Points initialised.");
+            //Initiate handshake with background script to initialise observation and debugging state from storage
+            chrome.runtime.sendMessage({handshake: "initiate"});
             //Stop interval function from repeating any further
             clearInterval(interval);
-            //TODO: also send message to background script to initialise debugMode and isOperating from storage
         }
         //Attempt to initialise extension every 250ms
     }, 250);

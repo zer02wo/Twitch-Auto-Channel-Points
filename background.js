@@ -3,7 +3,7 @@ chrome.runtime.onInstalled.addListener(function(details) {
     //TODO: figure out what actions need to be performed
     if(details.reason == "install") {
         //Perform some action
-        //TODO: set debugMode to on by default (can set to false)
+        //TODO: set debugMode to off by default (can set to on)
         //TODO: set extension to on by default (can set to off)
     } else if(details.reason == "update") {
         //Perform other action
@@ -11,13 +11,36 @@ chrome.runtime.onInstalled.addListener(function(details) {
 });
 
 //Listen to receive updated points information from content script
-chrome.runtime.onMessage.addListener(function(msg) {
+chrome.runtime.onMessage.addListener(function(msg, sender) {
     //Listen for message
     if(msg.username !== undefined && msg.points !== undefined) {
         //Message contains username and points, update values in storage
         updatePointValues(msg.username, msg.points);
+    } else if(msg.handshake == "initiate") {
+        //New content script has initialised, update state from storage
+        setContentStateFromStorage(sender, "_exe", "toggleObserver");
+        setContentStateFromStorage(sender, "_dbg", "toggleDebug");
     }
 });
+
+//Set state of content script based on stored value
+function setContentStateFromStorage(sender, objectId, functionName) {
+    chrome.storage.sync.get([objectId], function(res) {
+        let state = 1;
+        //Object state has not previously been recorded, should be done on install but precautionary measure
+        if(Object.keys(res).length === 0) {
+            //Create initiate storage and set to default state
+            chrome.storage.sync.set({[objectId]: state}, function() {
+                console.log(objectId + " state initialised.");
+            });
+        } else {
+            //Get state from storage response object
+            state = res[objectId];
+        }
+        //Send message to content script that initiated the handshake to update state
+        chrome.tabs.sendMessage(sender.tab.id, {[functionName]: state});
+    });
+}
 
 function updatePointValues(username, pointsValue) {
     //Message regarding an update in channel points
