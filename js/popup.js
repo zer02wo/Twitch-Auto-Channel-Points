@@ -39,45 +39,39 @@ function initiateHandshake() {
 
 //Initialise UI elements
 function initialiseUI(username) {
-    //Check storage permission to allow certain UI elements
-    chrome.permissions.contains({
-        permissions: ['storage'],
-        origins: ["https://www.twitch.tv/*"]
-    }, function(isGranted) {
-        if(isGranted) {
-            //Get total amount of points earned using extension across all channels
-            chrome.storage.sync.get("_total", function(res) {
-                //Channel points have not previously been recorded
-                if(Object.keys(res).length === 0) {
-                    //Create initial storage and set to 0
-                    chrome.storage.sync.set({"_total": 0}, function() {
-                        console.log("Total channel points initialised to 0");
-                        //Create total points UI element
-                        createPointsElement("total", 0);
-                    });
-                } else {
-                    //Create total points UI element based on stored value
-                    let totalPoints = res["_total"];
-                    createPointsElement("total", totalPoints);
-                }
+    //Get total amount of points earned using extension across all channels
+    chrome.storage.sync.get("_total", function(res) {
+        //Channel points have not previously been recorded
+        if(Object.keys(res).length === 0) {
+            //Create initial storage and set to 0
+            chrome.storage.sync.set({"_total": 0}, function() {
+                console.log("Total channel points initialised to 0");
+                //Create total points UI element
+                createPointsElement("total", 0);
             });
+        } else {
+            //Create total points UI element based on stored value
+            let totalPoints = res["_total"];
+            createPointsElement("total", totalPoints);
+        }
+    });
 
-            //Get amount of points earned using extension for this channel
-            chrome.storage.sync.get(username, function(res) {
-                //Channel points have not previously been recorded for this channel
-                if(Object.keys(res).length === 0) {
-                    //Create initial storage and set to 0
-                    chrome.storage.sync.set({[username]: 0}, function() {
-                        console.log(username + " channel points initialised to 0");
-                        //Create channel points UI element
-                        createPointsElement("channel", 0, username);
-                    });
-                } else {
-                    //Create channel points UI element based on stored value
-                    let channelPoints = res[username];
-                    createPointsElement("channel", channelPoints, username);
-                }
+    //Get amount of points earned using extension for this channel
+    chrome.storage.sync.get(username, function(res) {
+        //Channel points have not previously been recorded for this channel
+        if(Object.keys(res).length === 0) {
+            //Create initial storage and set to 0
+            chrome.storage.sync.set({[username]: 0}, function() {
+                console.log(username + " channel points initialised to 0");
+                //Create channel points UI element
+                createPointsElement("channel", 0, username);
             });
+        } else {
+            //Create channel points UI element based on stored value
+            let channelPoints = res[username];
+            createPointsElement("channel", channelPoints, username);
+        }
+    });
         }
     });
     //TODO: need to get state (i.e. on/off) of buttons on initial call (from storage)
