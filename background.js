@@ -13,7 +13,7 @@ chrome.runtime.onInstalled.addListener(function(details) {
 //Listen to receive updated points information from content script
 chrome.runtime.onMessage.addListener(function(msg) {
     //Listen for message
-    if(msg.username && msg.points) {
+    if(msg.username !== undefined && msg.points !== undefined) {
         //Message contains username and points, update values in storage
         updatePointValues(msg.username, msg.points);
     }

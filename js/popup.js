@@ -8,22 +8,22 @@
 //Initiate communication between popup and content script
 initiateHandshake();
 //Listen to receive response from content script
-chrome.runtime.onMessage.addListener(function(message) {
-    if(message.user) {
+chrome.runtime.onMessage.addListener(function(msg) {
+    if(msg.user !== undefined) {
         //Initialise main UI elements
-        initialiseUI(message.user);
-    } else if(message.update) {
+        initialiseUI(msg.user);
+    } else if(msg.update !== undefined) {
         //Update main UI elements with newest values
-        updateUI(message.update);
-    } else if(message.session) {
+        updateUI(msg.update);
+    } else if(msg.session !== undefined) {
         //Update session points UI element with newest value
-        updateUIElementValue("session-points", message.session);
-    } else if(message.debug) {
+        updateUIElementValue("session-points", msg.session);
+    } else if(msg.debug !== undefined) {
         //Update debug button with newest state
-        updateButtonState("debug", message.debug);
-    } else if(message.observer) {
+        updateButtonState("debug", msg.debug);
+    } else if(msg.observer !== undefined) {
         //Update on-off button with newest state
-        updateButtonState("on-off", message.observer);
+        updateButtonState("on-off", msg.observer);
     }
 });
 

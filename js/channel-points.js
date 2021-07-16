@@ -8,29 +8,24 @@ var sessionPoints = 0;
 
 //Listen for messages from extension scripts
 chrome.runtime.onMessage.addListener(function(msg) {
-    switch(msg) {
-        case "getUsername":
-            //Get Twitch username and return in message
-            const username = getUsername();
-            chrome.runtime.sendMessage({user: username});
-            break;
-        case "getSessionPoints":
-            //Return number of points earned this session
-            chrome.runtime.sendMessage({session: sessionPoints});
-            break;
-        case "toggleDebug":
-            //Toggle debugging state and return new state
-            const debugState = toggleDebug();
-            chrome.runtime.sendMessage({debug: debugState});
-            break;
-        case "toggleObserver":
-            //Toggle auto-click on or off by toggling observation state
-            const observerState = toggleObserver();
-            chrome.runtime.sendMessage({observer: observerState});
-            break;
-        default:
-            //Log any unexpected messages when in debug mode
-            debugMode && console.log("Unexpected message received: " + msg);
+    if(msg.toggleObserver !== undefined) {
+        //Set auto-click on or off by toggling observation state
+        const observerState = toggleObserver(msg.toggleObserver);
+        chrome.runtime.sendMessage({observer: observerState});
+    } else if(msg.toggleDebug !== undefined) {
+        //Set console logging on or off by toggling debugging state
+        const debugState = toggleDebug(msg.toggleDebug);
+        chrome.runtime.sendMessage({debug: debugState});
+    } else if(msg == "getSessionPoints") {
+        //Return number of points earned this session
+        chrome.runtime.sendMessage({session: sessionPoints});
+    } else if(msg == "getUsername") {
+        //Get Twitch username and return in message
+        const username = getUsername();
+        chrome.runtime.sendMessage({user: username});
+    } else {
+        //Log any unexpected messages when in debug mode
+        debugMode && console.log("Unexpected extension message received:\n" , msg);
     }
 });
 
