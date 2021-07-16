@@ -80,7 +80,7 @@ function initialiseUI(username) {
             });
         }
     });
-    //TODO: need to get state (i.e. on/off) of buttons on initial call
+    //TODO: need to get state (i.e. on/off) of buttons on initial call (from storage)
     //TODO: Initialise other UI elements as required
     setButtonListeners();
 }
@@ -152,22 +152,40 @@ function updateButtonState(buttonId, state) {
 function setButtonListeners() {
     //Toggle auto-clicker. Listen for click on button.
     document.getElementById("on-off").addEventListener("click", function() {
-        //TODO: NEED TO USE STORAGE TO KEEP THESE IN SYNC
-        getTwitchTabs().then(ttvTabs => {
-            ttvTabs.forEach(tab => {
-                chrome.tabs.sendMessage(tab.id, "toggleDebug");
-            });
-        });
+        updateStorageAndSend("_exe", "toggleObserver");
     });
 
     //Toggle debug mode. Listen for click on button.
     document.getElementById("debug").addEventListener("click", function() {
-        //TODO: NEED TO USE STORAGE TO KEEP THESE IN SYNC
-        getTwitchTabs().then(ttvTabs => {
-            ttvTabs.forEach(tab => {
-                chrome.tabs.sendMessage(tab.id, "toggleDebug");
+        updateStorageAndSend("_dbg", "toggleDebug");
+    });
+}
+
+//Update stored object with id and run function by name in content script
+function updateStorageAndSend(objectId, functionName) {
+    //Get object state from storage by id
+    chrome.storage.sync.get(objectId, function(res) {
+        let state = res[objectId];
+        //Object state has not previously been recorded, should be done on install but precautionary measure
+        if(Object.keys(res).length === 0) {
+            //Create initiate storage and set to 1/true
+            chrome.storage.sync.set({[objectId]: 1}, function() {
+                console.log(objectId + " state initialised.");
+            })
+        } else {
+            //Toggle boolean state (0 or 1)
+            let newState = 1 - state;
+            //Update object state within storage
+            chrome.storage.sync.set({[objectId]: newState}, function() {
+                console.log("Execution state updated to: " + newState);
+                //Update object state within content script
+                getTwitchTabs().then(ttvTabs => {
+                    ttvTabs.forEach(tab => {
+                        chrome.tabs.sendMessage(tab.id, {[functionName]: newState});
+                    });
+                });
             });
-        });
+        }
     });
 }
 
