@@ -111,18 +111,18 @@ function startObserver() {
 }
 
 //Toggle observer to start/stop watching for mutations
-function toggleObserver() {
-    //If observer is watching for mutations
-    if(isObserving) {
-        //Disconnect and update state
-        observer.disconnect();
-        isObserving = false;
-        debugMode && console.log("Auto-clicker is now off.");
-    } else {
-        //Start observer and update state
+function toggleObserver(isOn) {
+    //Update observer based on message passed from popup
+    if(isOn) {
+        //Start observer and update local state
         initialCheck();
         isObserving = true;
         debugMode && console.log("Auto-clicker is now on.");
+    } else {
+        //Disconnect observer and update local state
+        observer.disconnect();
+        isObserving = false;
+        debugMode && console.log("Auto-clicker is now off.");
     }
     //Return observer state as a string value for popup
     return getStateString(isObserving);
@@ -143,11 +143,18 @@ function getUsername() {
     }
 }
 
-//Toggle state of debug mode
-function toggleDebug() {
-    //Set debug mode to opposite of current state
-    debugMode = !debugMode;
-    console.log("Debug mode set to: " + debugMode);
+//Toggle state of debug mode console logging
+function toggleDebug(isOn) {
+    //Update debug mode based on message passed from popup
+    if(isOn) {
+        //Update local state and log to console
+        debugMode = true;
+        console.log("Debug mode is now on. Logging to console.");
+    } else {
+        //Update local state and log to console
+        debugMode = false;
+        console.log("Debug mode is now off. No longer logging to console.");
+    }
     //Return debug state as a string value for popup
     return getStateString(debugMode);
 }
