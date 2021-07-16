@@ -1,6 +1,5 @@
 //TODO: add functions:
-    //Reset channel and/or total points
-        //Probably just for debugging, but maybe a full feature
+    //Reset total points
 
 //TODO: set popup to something different when not on a live twitch channel
     //Replace with entirely different HTML file if possible? (Keep donation button and same style on this)
@@ -79,7 +78,7 @@ function initialiseUI(username) {
     setButtonStateFromStorage("_exe", "on-off");
     setButtonStateFromStorage("_dbg", "debug");
     //Set listener events for buttons
-    setButtonListeners();
+    setButtonListeners(username);
 }
 
 //Update UI when popup is kept open using values from storage
@@ -143,7 +142,7 @@ function setButtonStateFromStorage(objectId, buttonId) {
 }
 
 //Set event listeners for button controls in popup
-function setButtonListeners() {
+function setButtonListeners(username) {
     //Toggle auto-clicker. Listen for click on button.
     document.getElementById("on-off").addEventListener("click", function() {
         updateStorageAndSend("_exe", "toggleObserver");
@@ -152,6 +151,16 @@ function setButtonListeners() {
     //Toggle debug mode. Listen for click on button.
     document.getElementById("debug").addEventListener("click", function() {
         updateStorageAndSend("_dbg", "toggleDebug");
+    });
+
+    //Reset the points counter for current channel. Listen for click on button.
+    document.getElementById("reset-channel").addEventListener("click", function() {
+        //Set points value to 0
+        chrome.storage.sync.set({[username]: 0}, function() {
+            console.log("Reset channel points count for " + username);
+            //Update UI to reflect reset value
+            updateUI({username: username});
+        });
     });
 }
 
