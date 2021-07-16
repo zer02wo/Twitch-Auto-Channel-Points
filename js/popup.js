@@ -72,10 +72,11 @@ function initialiseUI(username) {
             createPointsElement("channel", channelPoints, username);
         }
     });
-        }
-    });
-    //TODO: need to get state (i.e. on/off) of buttons on initial call (from storage)
-    //TODO: Initialise other UI elements as required
+    
+    //Set visual state of buttons from storage
+    setButtonStateFromStorage("_exe", "on-off");
+    setButtonStateFromStorage("_dbg", "debug");
+    //Set listener events for buttons
     setButtonListeners();
 }
 
@@ -132,7 +133,6 @@ function updateUIElementValue(elementId, pointsValue) {
 //Updates specified button element with new state
 function updateButtonState(buttonId, state) {
     const button = document.getElementById(buttonId);
-    //TODO: may need to add more states in the future
     if(state == "active") {
         button.classList.add("active");
         button.classList.remove("inactive");
@@ -140,6 +140,32 @@ function updateButtonState(buttonId, state) {
         button.classList.add("inactive");
         button.classList.remove("active");
     }
+}
+
+//Set visual button state in popup menu from stored value
+function setButtonStateFromStorage(objectId, buttonId) {
+    chrome.storage.sync.get([objectId], function(res) {
+        let state = 1;
+        //Object state has not previously been recorded, should be done on install but precautionary measure
+        if(Object.keys(res).length === 0) {
+            //Create initiate storage and set to default state
+            chrome.storage.sync.set({[objectId]: state}, function() {
+                console.log(objectId + " state initialised.");
+            });
+        } else {
+            //Get state from storage response object
+            state = res[objectId];
+        }
+
+        //Update button based on state value
+        if(state) {
+            //Active state so set button to active class
+            updateButtonState(buttonId, "active");
+        } else {
+            //Inactive state so set button to inactive class
+            updateButtonState(buttonId, "inactive");
+        }
+    });
 }
 
 //Set event listeners for button controls in popup
@@ -159,27 +185,20 @@ function setButtonListeners() {
 function updateStorageAndSend(objectId, functionName) {
     //Get object state from storage by id
     chrome.storage.sync.get(objectId, function(res) {
+        //Get state from storage response object
         let state = res[objectId];
-        //Object state has not previously been recorded, should be done on install but precautionary measure
-        if(Object.keys(res).length === 0) {
-            //Create initiate storage and set to 1/true
-            chrome.storage.sync.set({[objectId]: 1}, function() {
-                console.log(objectId + " state initialised.");
-            })
-        } else {
-            //Toggle boolean state (0 or 1)
-            let newState = 1 - state;
-            //Update object state within storage
-            chrome.storage.sync.set({[objectId]: newState}, function() {
-                console.log("Execution state updated to: " + newState);
-                //Update object state within content script
-                getTwitchTabs().then(ttvTabs => {
-                    ttvTabs.forEach(tab => {
-                        chrome.tabs.sendMessage(tab.id, {[functionName]: newState});
-                    });
+        //Toggle boolean state (0 or 1)
+        let newState = 1 - state;
+        //Update object state within storage
+        chrome.storage.sync.set({[objectId]: newState}, function() {
+            console.log("Execution state updated to: " + newState);
+            //Update object state within content script
+            getTwitchTabs().then(ttvTabs => {
+                ttvTabs.forEach(tab => {
+                    chrome.tabs.sendMessage(tab.id, {[functionName]: newState});
                 });
             });
-        }
+        });
     });
 }
 
