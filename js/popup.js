@@ -82,8 +82,8 @@ function initialiseUI(username) {
     setButtonListeners();
 }
 
+//Update UI when popup is kept open using values from storage
 function updateUI(data) {
-    //Do not need to check for storage permissions as it was done in background script to pass this message
     //Update total points element
     chrome.storage.sync.get("_total", function(res) {
         let totalPoints = res["_total"];
