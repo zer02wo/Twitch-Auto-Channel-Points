@@ -1,6 +1,3 @@
-//TODO: add functions:
-    //Reset total points
-
 //TODO: set popup to something different when not on a live twitch channel
     //Replace with entirely different HTML file if possible? (Keep donation button and same style on this)
 
