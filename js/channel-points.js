@@ -53,6 +53,10 @@ function observerCallback(mutationsList) {
                     //TODO: Test to see if channel point bets are different format (i.e. 4.5K, 6.7M, etc)
                         //Should passive points and betting even be counted anyway? Only count on the auto click?
                         //Does betting also subtract points if losing?
+
+                    //TODO: click prompt gives 50 base with 1.2x, 1.4x and 2x multipliers for each subscription tier
+                        //No other prompts have point values of 50, 60, 70 or 100
+                            //Except betting points have a possibility, but still unsure if they show in the same menu with the same prompt
                     //Add points to totals
                     sessionPoints += pointsAmount;
                     //Send message to background script to update point totals
