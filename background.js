@@ -1,12 +1,16 @@
 //Initialise extension on installation
 chrome.runtime.onInstalled.addListener(function(details) {
-    //TODO: figure out what actions need to be performed
     if(details.reason == "install") {
-        //Perform some action
-        //TODO: set debugMode to off by default (can set to on)
-        //TODO: set extension to on by default (can set to off)
+        //Create initiate storage and set to default states
+        chrome.storage.sync.set({"_exe": 1}, function() {
+            console.log("Execution state storage initialised.");
+        });
+        chrome.storage.sync.set({"_dbg": 0}, function() {
+            console.log("Debug state storage initialised.");
+        });
     } else if(details.reason == "update") {
         //Perform other action
+        //TODO: figure out what actions need to be performed
     }
 });
 
