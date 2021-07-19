@@ -142,17 +142,13 @@ function toggleObserver(isOn) {
 
 //Get Twitch username as formatted within the URL
 function getUsername() {
-    //Get first part of URL path
-    const initialSplit = window.location.href.split("twitch.tv/")[1];
-    if(initialSplit.includes("/")) {
-        //Remove any subsequent paths
-        return initialSplit.split("/")[0];
-    } else if(initialSplit.includes("?")) {
-        //Remove any query strings
-        return initialSplit.split("?")[0];
-    } else {
-        return initialSplit;
-    }
+    //Get URL from window location object
+    const url = window.location.href;
+    //Match characters after "twitch.tv/", excluding the word "videos"
+    const regex = /(?<=twitch\.tv\/(?!videos\W))[a-z0-9_]+/ig;
+    //Return username
+    const [username] = url.match(regex);
+    return username;
 }
 
 //Toggle state of debug mode console logging
