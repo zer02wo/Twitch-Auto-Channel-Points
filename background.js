@@ -1,18 +1,40 @@
 //Initialise extension on installation
 chrome.runtime.onInstalled.addListener(function(details) {
+    //First time set up for state storage
     if(details.reason == "install") {
-        //Create initiate storage and set to default states
-        chrome.storage.sync.set({"_exe": 1}, function() {
-            console.log("Execution state storage initialised.");
-        });
-        chrome.storage.sync.set({"_dbg": 0}, function() {
-            console.log("Debug state storage initialised.");
-        });
+        //Create storage for execution state and set to default of on
+        initialiseStorage("_exe");
+        //Create storage for debug mode state and set to default of off
+        initialiseStorage("_dbg");
     } else if(details.reason == "update") {
-        //Perform other action
-        //TODO: figure out what actions need to be performed
+        //Check storage for execution state still exists after update
+        checkStorage("_exe");
+        //Check storage for debug mode state still exists after update
+        checkStorage("_dbg");
     }
 });
+
+//Create initial storage object and set to specified state
+function initialiseStorage(objectId) {
+    //Set default state based on object ID
+    const state = (objectId == "_exe") ? 1 : 0; 
+    //Create storage for object ID with value of state
+    chrome.storage.sync.set({[objectId]: state}, function() {
+        console.log(objectId + " state storage initialised");
+    });
+}
+
+//Check storage object exists and recreate it as necessary
+function checkStorage(objectId) {
+    //Attempt to get object from storage by ID
+    chrome.storage.sync.get(objectId, function(res) {
+        //Storage variable does not exist
+        if(Object.keys(res).length === 0) {
+            //Create initial storage object for ID
+            initialiseStorage(objectId);
+        }
+    });
+}
 
 //Listen to receive updated points information from content script
 chrome.runtime.onMessage.addListener(function(msg, sender) {
