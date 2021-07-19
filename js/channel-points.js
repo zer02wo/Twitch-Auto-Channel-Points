@@ -86,8 +86,8 @@ window.onload = function() {
             //Stop interval function from repeating any further
             clearInterval(interval);
         }
-        //Attempt to initialise extension every 250ms
-    }, 250);
+        //Attempt to initialise extension every 200ms
+    }, 200);
 }
 
 //Initial check if channel points button exists before observation
