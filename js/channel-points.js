@@ -117,7 +117,6 @@ function initialCheck() {
 //Set up observer to watch for mutations on channel points
 function startObserver() {
     //Get container element for channel points information
-    //TODO: this doesn't seem to be returning nodes?
     const pointsContainer = document.getElementsByClassName("community-points-summary")[0].children[1];
 
     //Options for MutationObserver object
@@ -134,12 +133,12 @@ function toggleObserver(isOn) {
         //Start observer and update local state
         initialCheck();
         isObserving = true;
-        debugMode && console.log("Auto-clicker is now on.");
+        debugMode && console.log("Auto-clicker is on.");
     } else {
         //Disconnect observer and update local state
         observer.disconnect();
         isObserving = false;
-        debugMode && console.log("Auto-clicker is now off.");
+        debugMode && console.log("Auto-clicker is off.");
     }
     //Return observer state as a string value for popup
     return getStateString(isObserving);
@@ -162,11 +161,11 @@ function toggleDebug(isOn) {
     if(isOn) {
         //Update local state and log to console
         debugMode = true;
-        console.log("Debug mode is now on. Logging to console.");
+        console.log("Debug mode is on. Logging to console.");
     } else {
         //Update local state and log to console
         debugMode = false;
-        console.log("Debug mode is now off. No longer logging to console.");
+        console.log("Debug mode is off. No longer logging to console.");
     }
     //Return debug state as a string value for popup
     return getStateString(debugMode);
