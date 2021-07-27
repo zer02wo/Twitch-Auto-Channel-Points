@@ -49,7 +49,7 @@ function observerCallback(mutationsList) {
                 const pulseAnimation = innerContainer.querySelector(".pulse-animation");
                 if(pulseAnimation !== null) {
                     //Retrieve number of channel points earned
-                    const pointsAmount = +pulseAnimation.querySelector("div.sc-AxjAm.jPJPAu").innerText;
+                    const pointsAmount = +pulseAnimation.querySelector("div").innerText;
                     //TODO: Test to see if channel point bets are different format (i.e. 4.5K, 6.7M, etc)
                         //Should passive points and betting even be counted anyway? Only count on the auto click?
                         //Does betting also subtract points if losing?
@@ -93,11 +93,12 @@ window.onload = function() {
 //Initial check if channel points button exists before observation
 function initialCheck() {
     //Check if container element exists
-    const pointsCheck = document.getElementsByClassName("sc-AxjAm bnsqjT")[0];
-    if(pointsCheck !== undefined) {
+    const pointsSummary = document.getElementsByClassName("community-points-summary")[0];
+    if(pointsSummary !== undefined) {
         //Begin observing channel points
         startObserver();
-        //Check if container element has points redeem button
+        //Check if inner container element has points redeem button
+        const pointsCheck = pointsSummary.children[1];
         const pointsButton = pointsCheck.querySelector("button");
         if(pointsButton !== null) {
             //Click button to redeem channel points
@@ -113,7 +114,8 @@ function initialCheck() {
 //Set up observer to watch for mutations on channel points
 function startObserver() {
     //Get container element for channel points information
-    const pointsContainer = document.getElementsByClassName("sc-AxjAm bnsqjT")[0];
+    //TODO: this doesn't seem to be returning nodes?
+    const pointsContainer = document.getElementsByClassName("community-points-summary")[0].children[1];
 
     //Options for MutationObserver object
     const observerConfig = {childList: true, subtree: true};
