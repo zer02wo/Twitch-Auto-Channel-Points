@@ -113,3 +113,17 @@ function updatePointValues(username, pointsValue) {
     };
     chrome.runtime.sendMessage({update: data});
 }
+
+//Listen to receive updates from changes in tabs
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+    //Ignore update events not related to Twitch pages
+    if(tab.url.indexOf("twitch.tv") == -1) {
+        return;
+    }
+    //If tab update is regarding a change in URL
+    if(changeInfo.url) {
+        //Inform content script associated with tab
+        console.log("Twitch URL updated to " + changeInfo.url);
+        chrome.tabs.sendMessage(tabId, "urlUpdate");
+    }
+});

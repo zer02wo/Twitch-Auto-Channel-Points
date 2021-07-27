@@ -24,6 +24,9 @@ chrome.runtime.onMessage.addListener(function(msg) {
         //Get Twitch username and return in message
         const username = getUsername();
         chrome.runtime.sendMessage({user: username});
+    } else if(msg == "urlUpdate") {
+        //Perform initialisation after tab URL has updated
+        loadingCheck();
     } else {
         //Log any unexpected messages when in debug mode
         debugMode && console.log("Unexpected extension message received:\n" , msg);
@@ -180,6 +183,3 @@ function getStateString(boolean) {
         return "inactive";
     }
 }
-
-//TODO: FIX BUG WHEN CHANGING CHANNELS (i.e. clicking usernames) (ALSO RAIDING)
-    //Need to re-perform initial check? More complex than this?
