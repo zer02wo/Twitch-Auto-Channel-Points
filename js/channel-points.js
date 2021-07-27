@@ -5,6 +5,8 @@ var isObserving = false;
 //Record total amount of points earned in session (i.e. since refresh)
 var sessionPoints = 0;
 
+window.onload = loadingCheck();
+
 //Listen for messages from extension scripts
 chrome.runtime.onMessage.addListener(function(msg) {
     if(msg.toggleObserver !== undefined) {
@@ -75,18 +77,19 @@ function observerCallback(mutationsList) {
 //Create global MutationObserver
 const observer = new MutationObserver(observerCallback);
 
-window.onload = function() {
+//Wait for Twitch page to dynamically load all elements before performing points check
+function loadingCheck() {
+    //Attempt to initialise extension every 200ms
     var interval = setInterval(function() {
         //Returns true when required DOM element loads
         if(initialCheck()) {
             //Log to console regardless of debug mode
-            console.log("Twitch Auto Channel Points initialised.");
+            console.log("Twitch Auto Channel Points initialised for " + getUsername());
             //Initiate handshake with background script to initialise observation and debugging state from storage
             chrome.runtime.sendMessage({handshake: "initiate"});
             //Stop interval function from repeating any further
             clearInterval(interval);
         }
-        //Attempt to initialise extension every 200ms
     }, 200);
 }
 
