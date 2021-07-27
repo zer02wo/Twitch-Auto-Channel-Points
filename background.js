@@ -44,8 +44,8 @@ chrome.runtime.onMessage.addListener(function(msg, sender) {
         updatePointValues(msg.username, msg.points);
     } else if(msg.handshake == "initiate") {
         //New content script has initialised, update state from storage
-        setContentStateFromStorage(sender, "_exe", "toggleObserver");
         setContentStateFromStorage(sender, "_dbg", "toggleDebug");
+        setContentStateFromStorage(sender, "_exe", "toggleObserver");
     }
 });
 
