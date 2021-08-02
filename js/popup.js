@@ -14,7 +14,7 @@ function isInvalidTwitchURL() {
         //Get URL from current tab
         const url = curTab.url;
         //Matches valid Twitch URL, ignoring "...tv/videos" and "...tv/<username>/clip/" exceptions
-        const regex = /^https?:\/\/www\.twitch\.tv\/(?!videos|[a-z0-9_]+\/clip\W)[a-z0-9_]+\/?[a-z0-9_]+\/?/ig;
+        const regex = /^https?:\/\/www\.twitch\.tv\/(?!videos\W|[a-z0-9_]+\/clip\W)[a-z0-9_]+\/?[a-z0-9_]+\/?/ig;
         //Check if URL matches regular expression
         if(url.match(regex) == null) {
             //Invalid Twitch page
