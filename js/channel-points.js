@@ -33,7 +33,41 @@ chrome.runtime.onMessage.addListener(function(msg) {
     }
 });
 
-//Callback function for MutationObserver
+//Callback function for MutationObserver facilitating root element loading
+function rootObserverCallback(mutationsList, rootObserver) {
+    //Root element updated, check for existence of points wrapper element
+    const pointsWrapper = document.getElementsByClassName("chat-input__buttons-container")[0];
+    //If points wrapper element exists
+    if(pointsWrapper !== undefined) {
+        //Stop listening for future mutation events
+        rootObserver.disconnect();
+        //Set up more precise MutationObserver to reduce resource usage
+        const loadingObserver = new MutationObserver(loadingObserverCallback);
+        //Options for MutationObserver object
+        const loadingConfig = {childList: true, subtree: true};
+        //Unpartnered Twitch channels do not have access to channel-points and thus the "community-points-summary" element may not ever load
+            //This more precise observer improves performance by not firing upon every change to the root element (e.g. every Twitch chat message)
+        loadingObserver.observe(pointsWrapper, loadingConfig);
+    }
+}
+
+//Callback function for MutationObserver facilitating points element loading
+function loadingObserverCallback(mutationsList, loadingObserver) {
+    //Points wrapper element updated, check for existence of points summary element
+    const pointsContainer = document.getElementsByClassName("community-points-summary")[0];
+    if(pointsContainer !== undefined) {
+        //Stop listening for future mutation events
+        loadingObserver.disconnect();
+        //Perform initial check and set up auto-clicker
+        initialCheck();
+        //Log to console regardless of debug mode
+        console.log("Twitch Auto Channel Points initialised for " + getUsername());
+        //Initiate handshake with background script to initialise observation and debugging state from storage
+        chrome.runtime.sendMessage({handshake: "initiate"});
+    }
+}
+
+//Callback function for MutationObserver facilitating auto-clicker
 function observerCallback(mutationsList) {
     //For each observed mutation
     for(const mutation of mutationsList) {
@@ -79,23 +113,24 @@ function observerCallback(mutationsList) {
 
 //Wait for Twitch page to dynamically load all elements before performing points check
 function loadingCheck() {
-    //Do not load auto-clicker on invalid Twitch pages
+    //Do not load rootObserver on invalid Twitch pages to reduce resource usage
     if(window.location.href.indexOf(".tv/videos/") !== -1 || window.location.href.indexOf("/clip/") !== -1) {
         return;
     }
 
-    //Attempt to initialise extension every 200ms
-    var interval = setInterval(function() {
-        //Returns true when required DOM element loads
-        if(initialCheck()) {
-            //Log to console regardless of debug mode
-            console.log("Twitch Auto Channel Points initialised for " + getUsername());
-            //Initiate handshake with background script to initialise observation and debugging state from storage
-            chrome.runtime.sendMessage({handshake: "initiate"});
-            //Stop interval function from repeating any further
-            clearInterval(interval);
-        }
-    }, 200);
+    //Perform precursory check that element has not already been loaded
+        //Prevents rootObserver restarting on URL change (whilst the page is kept loaded)
+    const pointsSummary = document.getElementsByClassName("community-points-summary")[0];
+    if(pointsSummary == undefined) {
+        //Create MutationObserver for root element
+        const rootObserver = new MutationObserver(rootObserverCallback);
+        //Get root element (the first/only loaded element)
+        const rootElement = document.getElementById("root");
+        //Options for MutationObserver object
+        const rootConfig = {childList: true, subtree: true};
+        //Observe root element with specificed configuration
+        rootObserver.observe(rootElement, rootConfig);
+    }
 }
 
 //Initial check if channel points button exists before observation
@@ -126,10 +161,8 @@ const observer = new MutationObserver(observerCallback);
 function startObserver() {
     //Get container element for channel points information
     const pointsContainer = document.getElementsByClassName("community-points-summary")[0].children[1];
-
     //Options for MutationObserver object
     const observerConfig = {childList: true, subtree: true};
-
     //Observe pointsContainer with specificied configuration
     observer.observe(pointsContainer, observerConfig);
 }
