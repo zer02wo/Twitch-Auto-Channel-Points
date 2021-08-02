@@ -77,9 +77,6 @@ function observerCallback(mutationsList) {
     }
 }
 
-//Create global MutationObserver
-const observer = new MutationObserver(observerCallback);
-
 //Wait for Twitch page to dynamically load all elements before performing points check
 function loadingCheck() {
     //Do not load auto-clicker on invalid Twitch pages
@@ -121,6 +118,9 @@ function initialCheck() {
         return false;
     }
 }
+
+//Create global MutationObserver
+const observer = new MutationObserver(observerCallback);
 
 //Set up observer to watch for mutations on channel points
 function startObserver() {
