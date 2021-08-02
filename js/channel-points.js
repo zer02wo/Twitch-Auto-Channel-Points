@@ -58,13 +58,19 @@ function loadingObserverCallback(mutationsList, loadingObserver) {
     if(pointsContainer !== undefined) {
         //Stop listening for future mutation events
         loadingObserver.disconnect();
-        //Perform initial check and set up auto-clicker
-        initialCheck();
-        //Log to console regardless of debug mode
-        console.log("Twitch Auto Channel Points initialised for " + getUsername());
-        //Initiate handshake with background script to initialise observation and debugging state from storage
-        chrome.runtime.sendMessage({handshake: "initiate"});
+        //Set up auto-clicker functionality whilst debouncing multiple sequential calls
+        debouncedSetUp();
     }
+}
+
+//Set up auto-clicking behaviour for first time on valid Twitch page
+function setUpAutoClicker() {
+    //Perform initial check and set up auto-clicker
+    initialCheck();
+    //Log to console regardless of debug mode
+    console.log("Twitch Auto Channel Points initialised for " + getUsername());
+    //Initiate handshake with background script to initialise observation and debugging state from storage
+    chrome.runtime.sendMessage({handshake: "initiate"});
 }
 
 //Callback function for MutationObserver facilitating auto-clicker
@@ -221,3 +227,21 @@ function getStateString(boolean) {
         return "inactive";
     }
 }
+
+//Group multiple sequential calls into single one 
+function debounce(func, delay) {
+    //Time function was last executed
+    var lastExecution = 0;
+    //Return debounced function
+    return function debouncedFunc() {
+        //If time since last execution is greater than delay
+        if (Date.now() - lastExecution > delay) {
+            //Make single call to function
+            func();
+        }
+        //Set time of last execution to current time
+        lastExecution = Date.now();
+    };
+}
+//Debounced function for setting up auto-clicker
+var debouncedSetUp = debounce(setUpAutoClicker, 1000);
