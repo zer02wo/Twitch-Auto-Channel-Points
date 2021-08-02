@@ -12,6 +12,8 @@ chrome.runtime.onInstalled.addListener(function(details) {
         //Check storage for debug mode state still exists after update
         checkStorage("_dbg");
     }
+    //Set badge colour to Twitch-themed background
+    chrome.action.setBadgeBackgroundColor({color: "#9147FF"});
 });
 
 //Create initial storage object and set to specified state
@@ -46,13 +48,37 @@ chrome.runtime.onMessage.addListener(function(msg, sender) {
         //New content script has initialised, update state from storage
         setContentStateFromStorage(sender, "_dbg", "toggleDebug");
         setContentStateFromStorage(sender, "_exe", "toggleObserver");
+        //Request session points from content script
+        chrome.tabs.sendMessage(sender.tab.id, "getSessionPoints");
         //Enable popup upon handshake initiation
         chrome.action.setPopup({
             popup: "popup.html",
             tabId: sender.tab.id
         });
+    } else if(msg.session !== undefined) {
+        //Format session points as a string value
+        const sessionString = formatBadgeString(msg.session);
+        //Set badge text as 
+        chrome.action.setBadgeText({
+            text: sessionString,
+            tabId: sender.tab.id
+        });
     }
 });
+
+//Format points value to be presented in extension badge
+function formatBadgeString(points) {
+    if(points >= 1000000) {
+        //1 million or more points
+        return (Math.abs(points)/1000000).toFixed(1) + "M";
+    } else if(points >= 1000) {
+        //1 thousand or more points
+        return (Math.abs(points)/1000).toFixed(0) + "K";
+    } else {
+        //999 or less points
+        return "" + points;
+    }
+}
 
 //Set state of content script based on stored value
 function setContentStateFromStorage(sender, objectId, functionName) {
@@ -133,6 +159,11 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
         //Remove popup upon changing URL
         chrome.action.setPopup({
             popup: "",
+            tabId: tabId
+        });
+        //Remove badge upon changing URL
+        chrome.action.setBadgeText({
+            text: "",
             tabId: tabId
         });
     }
