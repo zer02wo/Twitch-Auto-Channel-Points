@@ -92,17 +92,12 @@ function observerCallback(mutationsList) {
                 //Get pulse animation element
                 const pulseAnimation = innerContainer.querySelector(".pulse-animation");
                 if(pulseAnimation !== null) {
-                    //Retrieve number of channel points earned
-                    const pointsAmount = +pulseAnimation.querySelector("div").innerText;
-                    //TODO: Test to see if channel point bets are different format (i.e. 4.5K, 6.7M, etc)
-                        //Should passive points and betting even be counted anyway? Only count on the auto click?
-                        //Does betting also subtract points if losing?
-
-                    //TODO: click prompt gives 50 base with 1.2x, 1.4x and 2x multipliers for each subscription tier
-                        //No other prompts have point values of 50, 60, 70 or 100
-                            //Except betting points have a possibility, but still unsure if they show in the same menu with the same prompt
-                    //Add points to totals
-                    sessionPoints += pointsAmount;
+                    //Retrieve amount of channel points earned
+                    const pointsStr = +pulseAnimation.querySelector("div").innerText;
+                    //Format channel points to numeric value
+                    const pointsNum = formatPoints(pointsStr);           
+                    //Add points to total
+                    sessionPoints += pointsNum;
                     //Send message to background script to update point totals
                     const username = getUsername();
                     chrome.runtime.sendMessage({username: username, points: pointsAmount});
@@ -114,6 +109,26 @@ function observerCallback(mutationsList) {
             }
         }
     }
+}
+
+//Format points from mutation event to numeric value
+function formatPoints(pointsStr) {
+    //Remove commas from string
+    var num = pointsStr.replace(/,/g, "");
+    //Unsure if prediction results are truncated with "K" or "M" for large integers, implemented as precautionary measure until able to test
+    if(num.indexOf("K") !== -1) {
+        //Remove letter from string
+        num = pointsAmount.replace(/k/ig, "");
+        //Re-append the truncated digits
+        num = num + "000";
+    } else if(num.indexOf("M") !== -1) {
+        //Remove letter from string
+        num = pointsAmount.replace(/m/ig, "");
+        //Re-append the truncated digits
+        num = num + "000000";
+    }
+    //Return points value as number
+    return +num;
 }
 
 //Wait for Twitch page to dynamically load all elements before performing points check
