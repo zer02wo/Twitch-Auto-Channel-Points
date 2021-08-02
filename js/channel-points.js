@@ -54,8 +54,7 @@ function rootObserverCallback(mutationsList, rootObserver) {
 //Callback function for MutationObserver facilitating points element loading
 function loadingObserverCallback(mutationsList, loadingObserver) {
     //Points wrapper element updated, check for existence of points summary element
-    const pointsContainer = document.getElementsByClassName("community-points-summary")[0];
-    if(pointsContainer !== undefined) {
+    if(isElementLoaded(".community-points-summary")) {
         //Stop listening for future mutation events
         loadingObserver.disconnect();
         //Set up auto-clicker functionality whilst debouncing multiple sequential calls
@@ -126,8 +125,7 @@ function loadingCheck() {
 
     //Perform precursory check that element has not already been loaded
         //Prevents rootObserver restarting on URL change (whilst the page is kept loaded)
-    const pointsSummary = document.getElementsByClassName("community-points-summary")[0];
-    if(pointsSummary == undefined) {
+    if(!isElementLoaded(".community-points-summary")) {
         //Create MutationObserver for root element
         const rootObserver = new MutationObserver(rootObserverCallback);
         //Get root element (the first/only loaded element)
@@ -136,6 +134,16 @@ function loadingCheck() {
         const rootConfig = {childList: true, subtree: true};
         //Observe root element with specificed configuration
         rootObserver.observe(rootElement, rootConfig);
+    }
+}
+
+//Check whether an element exists in the class
+function isElementLoaded(identifier) {
+    const element = document.querySelector(identifier);
+    if(element == null) {
+        return false;
+    } else {
+        return true;
     }
 }
 
