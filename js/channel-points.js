@@ -82,6 +82,11 @@ const observer = new MutationObserver(observerCallback);
 
 //Wait for Twitch page to dynamically load all elements before performing points check
 function loadingCheck() {
+    //Do not load auto-clicker on invalid Twitch pages
+    if(window.location.href.indexOf(".tv/videos/") !== -1 || window.location.href.indexOf("/clip/") !== -1) {
+        return;
+    }
+
     //Attempt to initialise extension every 200ms
     var interval = setInterval(function() {
         //Returns true when required DOM element loads
