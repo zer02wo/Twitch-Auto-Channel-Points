@@ -1,30 +1,5 @@
-//Display popup content based on URL of tab accessing the menu
-if(isInvalidTwitchURL()) {
-    //TODO: replace HTML content when not on a valid Twitch channel URL
-        //Keep donation button and similar style
-} else {
-    //Initiate communication between popup and content script
-    initiateHandshake();
-}
-
-//Verify whether the current tab accessing popup menu is on a valid Twitch page
-function isInvalidTwitchURL() {
-    //Get current tab accessing popup
-    getCurrentTab().then(curTab => {
-        //Get URL from current tab
-        const url = curTab.url;
-        //Matches valid Twitch URL, ignoring "...tv/videos" and "...tv/<username>/clip/" exceptions
-        const regex = /^https?:\/\/www\.twitch\.tv\/(?!videos\W|[a-z0-9_]+\/clip\W)[a-z0-9_]+\/?[a-z0-9_]+\/?/ig;
-        //Check if URL matches regular expression
-        if(url.match(regex) == null) {
-            //Invalid Twitch page
-            return true;
-        } else {
-            //Valid Twitch page
-            return false;
-        }
-    });
-}
+//Initiate communication between popup and content script
+initiateHandshake();
 
 //Listen to receive response from content script
 chrome.runtime.onMessage.addListener(function(msg) {

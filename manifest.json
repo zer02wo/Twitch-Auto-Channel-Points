@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
-    "name": "Twitch Auto Channel Points",
-    "short_name": "TTV Points",
+    "name": "Twitch Channel Points+",
+    "short_name": "TTV Points+",
     "version": "1.0",
     "description": "Automatically redeem channel points on any live Twitch stream.",
 
@@ -12,11 +12,10 @@
     },
 
     "action": {
-        "default_title": "Twitch Auto Channel Points",
-        "default_popup": "popup.html"
+        "default_title": "Twitch Channel Points+"
     },
 
-    "permissions": ["storage", "tabs"],
+    "permissions": ["storage", "tabs", "declarativeContent"],
 
     "background": {
         "service_worker": "background.js"

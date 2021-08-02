@@ -46,6 +46,11 @@ chrome.runtime.onMessage.addListener(function(msg, sender) {
         //New content script has initialised, update state from storage
         setContentStateFromStorage(sender, "_dbg", "toggleDebug");
         setContentStateFromStorage(sender, "_exe", "toggleObserver");
+        //Enable popup upon handshake initiation
+        chrome.action.setPopup({
+            popup: "popup.html",
+            tabId: sender.tab.id
+        });
     }
 });
 
@@ -125,5 +130,10 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
         //Inform content script associated with tab
         console.log("Twitch URL updated to " + changeInfo.url);
         chrome.tabs.sendMessage(tabId, "urlUpdate");
+        //Remove popup upon changing URL
+        chrome.action.setPopup({
+            popup: "",
+            tabId: tabId
+        });
     }
 });
