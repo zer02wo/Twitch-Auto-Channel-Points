@@ -14,6 +14,10 @@ chrome.runtime.onInstalled.addListener(function(details) {
     }
     //Set badge colour to Twitch-themed background
     chrome.action.setBadgeBackgroundColor({color: "#9147FF"});
+    //Set default icon for all tabs to greyed out (excludes main icon on Extension page)
+    chrome.action.setIcon({
+        path: "images/grey-icon128.png"
+    });
 });
 
 //Create initial storage object and set to specified state
@@ -53,6 +57,11 @@ chrome.runtime.onMessage.addListener(function(msg, sender) {
         //Enable popup upon handshake initiation
         chrome.action.setPopup({
             popup: "popup.html",
+            tabId: sender.tab.id
+        });
+        //Set icon to be non-"greyed-out"
+        chrome.action.setIcon({
+            path: "images/icon128.png",
             tabId: sender.tab.id
         });
     } else if(msg.session !== undefined) {
@@ -164,6 +173,11 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
         //Remove badge upon changing URL
         chrome.action.setBadgeText({
             text: "",
+            tabId: tabId
+        });
+        //Set icon to "greyed-out" upon changing URL
+        chrome.action.setIcon({
+            path: "images/grey-icon128.png",
             tabId: tabId
         });
     }
