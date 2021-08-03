@@ -17,13 +17,17 @@ chrome.runtime.onMessage.addListener(function(msg) {
         //Set console logging on or off by toggling debugging state
         const debugState = toggleDebug(msg.toggleDebug);
         chrome.runtime.sendMessage({debug: debugState});
+    } else if(msg == "handshakePopup") {
+        //Get Twitch username and return in message
+        const username = getUsername();
+        chrome.runtime.sendMessage({handshakeContent: username});
     } else if(msg == "getSessionPoints") {
         //Return number of points earned this session
         chrome.runtime.sendMessage({session: sessionPoints});
     } else if(msg == "getUsername") {
         //Get Twitch username and return in message
         const username = getUsername();
-        chrome.runtime.sendMessage({user: username});
+        chrome.runtime.sendMessage({username: username});
     } else if(msg == "urlUpdate") {
         //Perform initialisation after tab URL has updated
         loadingCheck();

@@ -3,9 +3,9 @@ initiateHandshake();
 
 //Listen to receive response from content script
 chrome.runtime.onMessage.addListener(function(msg) {
-    if(msg.user !== undefined) {
+    if(msg.handshakeContent !== undefined) {
         //Initialise main UI elements
-        initialiseUI(msg.user);
+        initialiseUI(msg.handshakeContent);
     } else if(msg.update !== undefined) {
         //Update main UI elements with newest values
         updateUI(msg.update);
@@ -26,7 +26,7 @@ function initiateHandshake() {
     //Get current tab to query content script for information
     getCurrentTab().then(curTab => {
         //Initialise the popup by communicating with content script
-        chrome.tabs.sendMessage(curTab.id, "getUsername");
+        chrome.tabs.sendMessage(curTab.id, "handshakePopup");
         chrome.tabs.sendMessage(curTab.id, "getSessionPoints");
     });
 }
