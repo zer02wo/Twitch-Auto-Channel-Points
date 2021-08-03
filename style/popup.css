@@ -7,6 +7,12 @@ body {
     align-items: center;
     justify-content: start;
 }
+.points-display.active {
+    border: solid 1px blue;
+}
+.points-display.inactive {
+    border: solid 1px red;
+}
 
 .extension-control.active {
     border: solid 1px blue;

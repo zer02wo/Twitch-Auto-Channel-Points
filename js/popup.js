@@ -72,6 +72,8 @@ function initialiseUI(username) {
     //Set visual state of buttons from storage
     setButtonStateFromStorage("_exe", "on-off");
     setButtonStateFromStorage("_dbg", "debug");
+    //Set visual state of badge text option elements
+    updateBadgeTextOptions();
     //Set listener events for buttons
     setButtonListeners(username);
 }
@@ -90,12 +92,31 @@ function updateUI(data) {
         let channelPoints = res[username];
         updateUIElementValue("channel-points", channelPoints);
     });
+
+    //Update badge text option elements
+    updateBadgeTextOptions();
 }
 
 //Updates specified points UI element with new value
 function updateUIElementValue(elementId, pointsValue) {
     const element = document.getElementById(elementId);
     element.innerText = pointsValue;
+}
+
+//Update badge text option UI elements from stored value
+function updateBadgeTextOptions() {
+    //Reset all options to inactive
+    updateElementState("channel-display", "inactive");
+    updateElementState("total-display", "inactive");
+    updateElementState("session-display", "inactive");
+    //Get badge text option from storage
+    chrome.storage.sync.get("_badge", function(res) {
+        const option = res["_badge"];
+        //Dynamically get badge text option element ID
+        const elementId = option + "-display";
+        //Update active badge text option element state
+        updateElementState(elementId, "active");
+    });
 }
 
 //Updates specified button element with new state
@@ -174,6 +195,8 @@ function setButtonListeners(username) {
         //Set badge text option to channel
         chrome.storage.sync.set({"_badge": "channel"}, function() {
             console.log("Set badge text to channel");
+            //Update UI to reflect updated selection
+            updateUI({username: username});
             //Send message to background script to update badge text from stored values
             getCurrentTab().then(curTab => {
                 chrome.runtime.sendMessage({updateBadgeTextFromStorage: curTab.id, username: username});
@@ -185,6 +208,8 @@ function setButtonListeners(username) {
         //Set badge text option to total
         chrome.storage.sync.set({"_badge": "total"}, function() {
             console.log("Set badge text to total");
+            //Update UI to reflect updated selection
+            updateUI({username: username});
             //Send message to background script to update badge text from stored values
             getCurrentTab().then(curTab => {
                 chrome.runtime.sendMessage({updateBadgeTextFromStorage: curTab.id});
@@ -196,6 +221,8 @@ function setButtonListeners(username) {
         //Set badge text to session
         chrome.storage.sync.set({"_badge": "session"}, function() {
             console.log("Set badge text to session");
+            //Update UI to reflect updated selection
+            updateUI({username: username});
             //Send message to background script to update badge text from stored values
             getCurrentTab().then(curTab => {
                 chrome.runtime.sendMessage({updateBadgeTextFromStorage: curTab.id});
