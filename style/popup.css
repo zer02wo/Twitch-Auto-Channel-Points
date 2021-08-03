@@ -12,6 +12,7 @@ body {
 }
 .points-display.inactive {
     border: solid 1px red;
+    cursor: pointer;
 }
 
 .extension-control.active {
