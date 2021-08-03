@@ -171,24 +171,31 @@ function setButtonListeners(username) {
 
     //Reset points counter for current channel. Listen for click on button.
     document.getElementById("reset-channel").addEventListener("click", function() {
-        //Set points value to 0
-        chrome.storage.sync.set({[username]: 0}, function() {
-            console.log("Reset channel points count for " + username);
-            //Update UI to reflect reset value
-            updateUI({username: username});
-        });
+        if(confirm("Are you sure you want to reset your points counter for " + username + "?")) {
+            //Set points value to 0
+            chrome.storage.sync.set({[username]: 0}, function() {
+                console.log("Reset channel points count for " + username);
+                //Update UI to reflect reset value
+                updateUI({username: username});
+                //Send message to background script to update badge text from stored values
+                updateBadgeTextFromMessage(username);
+            });
+        }
     });
 
     //Reset points counter for total points. Listen for click on button.
     document.getElementById("reset-total").addEventListener("click", function() {
-        //Set points value to 0
-        chrome.storage.sync.set({"_total": 0}, function() {
-            console.log("Reset total points count");
-            //Update UI to reflect reset value
-            updateUI({username: username});
-        });
+        if(confirm("Are you sure you want to reset your total points counter?")) {
+            //Set points value to 0
+            chrome.storage.sync.set({"_total": 0}, function() {
+                console.log("Reset total points count");
+                //Update UI to reflect reset value
+                updateUI({username: username});
+                //Send message to background script to update badge text from stored values
+                updateBadgeTextFromMessage(username);
+            });
+        }
     });
-    //TODO: add some sort of confirmation prompt to the reset buttons?
 
     //Set badge text display to channel points. Listen for click on element.
     document.getElementById("channel-display").addEventListener("click", function() {
