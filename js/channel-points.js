@@ -100,9 +100,9 @@ function observerCallback(mutationsList) {
                     sessionPoints += pointsNum;
                     //Send message to background script to update point totals
                     const username = getUsername();
-                    chrome.runtime.sendMessage({username: username, points: pointsAmount});
+                    chrome.runtime.sendMessage({username: username, points: pointsNum});
                     //Log to console when in debug mode
-                    debugMode && console.log(pointsAmount + " points added!\nPoints for this session: " + sessionPoints);
+                    debugMode && console.log(pointsNum + " points added!\nPoints for this session: " + sessionPoints);
                     //Send message to background to update popup with session points
                     chrome.runtime.sendMessage({session: sessionPoints});
                 }
@@ -114,7 +114,7 @@ function observerCallback(mutationsList) {
 //Format points from mutation event to numeric value
 function formatPoints(pointsStr) {
     //Remove commas from string
-    var num = pointsStr.replace(/,/g, "");
+    var num = pointsStr.toString().replace(/,/g, "");
     //Unsure if prediction results are truncated with "K" or "M" for large integers, implemented as precautionary measure until able to test
     if(num.indexOf("K") !== -1) {
         //Remove letter from string
