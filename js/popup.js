@@ -14,10 +14,10 @@ chrome.runtime.onMessage.addListener(function(msg) {
         updateUIElementValue("session-points", msg.session);
     } else if(msg.debug !== undefined) {
         //Update debug button with newest state
-        updateButtonState("debug", msg.debug);
+        updateElementState("debug", msg.debug);
     } else if(msg.observer !== undefined) {
         //Update on-off button with newest state
-        updateButtonState("on-off", msg.observer);
+        updateElementState("on-off", msg.observer);
     }
 });
 
@@ -128,10 +128,10 @@ function setButtonStateFromStorage(objectId, buttonId) {
         //Update button based on state value
         if(state) {
             //Active state so set button to active class
-            updateButtonState(buttonId, "active");
+            updateElementState(buttonId, "active");
         } else {
             //Inactive state so set button to inactive class
-            updateButtonState(buttonId, "inactive");
+            updateElementState(buttonId, "inactive");
         }
     });
 }
