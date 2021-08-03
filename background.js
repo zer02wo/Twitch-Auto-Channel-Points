@@ -6,11 +6,15 @@ chrome.runtime.onInstalled.addListener(function(details) {
         initialiseStorage("_exe");
         //Create storage for debug mode state and set to default of off
         initialiseStorage("_dbg");
+        //Create storage for badge text state and set to default of session
+        initialiseStorage("_badge");
     } else if(details.reason == "update") {
         //Check storage for execution state still exists after update
         checkStorage("_exe");
         //Check storage for debug mode state still exists after update
         checkStorage("_dbg");
+        //Check storage for badge text state still exists after update
+        checkStorage("_badge");
     }
     //Set badge colour to Twitch-themed background
     chrome.action.setBadgeBackgroundColor({color: "#9147FF"});
@@ -23,7 +27,14 @@ chrome.runtime.onInstalled.addListener(function(details) {
 //Create initial storage object and set to specified state
 function initialiseStorage(objectId) {
     //Set default state based on object ID
-    const state = (objectId == "_exe") ? 1 : 0; 
+    let state;
+    if(objectId == "_exe") {
+        state = 1;
+    } else if(objectId == "_badge") {
+        state = "session";
+    } else {
+        state = 0;
+    }
     //Create storage for object ID with value of state
     chrome.storage.sync.set({[objectId]: state}, function() {
         console.log(objectId + " state storage initialised");
@@ -47,7 +58,7 @@ chrome.runtime.onMessage.addListener(function(msg, sender) {
     //Listen for message
     if(msg.username !== undefined && msg.points !== undefined) {
         //Message contains username and points, update values in storage
-        updatePointValues(msg.username, msg.points);
+        updatePointValues(msg.username, msg.points, sender);
     } else if(msg.handshake == "initiate") {
         //New content script has initialised, update state from storage
         setContentStateFromStorage(sender, "_dbg", "toggleDebug");
@@ -65,13 +76,8 @@ chrome.runtime.onMessage.addListener(function(msg, sender) {
             tabId: sender.tab.id
         });
     } else if(msg.session !== undefined) {
-        //Format session points as a string value
-        const sessionString = formatBadgeString(msg.session);
-        //Set badge text as session points
-        chrome.action.setBadgeText({
-            text: sessionString,
-            tabId: sender.tab.id
-        });
+        //Update badge text with session points value
+        updateBadgeText("session", msg.session, sender.tab.id);
     }
 });
 
@@ -108,7 +114,7 @@ function setContentStateFromStorage(sender, objectId, functionName) {
     });
 }
 
-function updatePointValues(username, pointsValue) {
+function updatePointValues(username, pointsValue, sender) {
     //Message regarding an update in channel points
     //Get total amount of points earned using extension for this specific channel
     chrome.storage.sync.get(username, function(res) {
@@ -118,6 +124,8 @@ function updatePointValues(username, pointsValue) {
             chrome.storage.sync.set({[username]: pointsValue}, function () {
                 console.log(username + " channel points initialised to: " + pointsValue);
             });
+            //Update badge text with initial channel points value
+            updateBadgeText("channel", pointsValue, sender.tab.id);
         } else {
             //Calculate total points for channel by adding increase to current total
             const newPoints = pointsValue + res[username];
@@ -125,6 +133,8 @@ function updatePointValues(username, pointsValue) {
             chrome.storage.sync.set({[username]: newPoints}, function () {
                 console.log(username + " channel points increased now totalling: " + newPoints);
             });
+            //Update badge text with channel points value
+            updateBadgeText("channel", newPoints, sender.tab.id);
         }
     });
 
@@ -137,6 +147,8 @@ function updatePointValues(username, pointsValue) {
             chrome.storage.sync.set({"_total": pointsValue}, function () {
                 console.log("Total channel points initialised to: " + pointsValue);
             });
+            //Update badge text with initial total points value
+            updateBadgeText("total", pointsValue, sender.tab.id);
         } else {
             //Calculate total points by adding increase to current total
             const newPoints = pointsValue + res["_total"];
@@ -144,6 +156,8 @@ function updatePointValues(username, pointsValue) {
             chrome.storage.sync.set({"_total": newPoints}, function () {
                 console.log("Total channel points earned with TACP is: " + newPoints);
             });
+            //Update badge text with total points value
+            updateBadgeText("total", newPoints, sender.tab.id);
         }
     });
 
@@ -152,6 +166,23 @@ function updatePointValues(username, pointsValue) {
         username: username
     };
     chrome.runtime.sendMessage({update: data});
+}
+
+//Update badge text for tab based on stored object value and provided points amount
+function updateBadgeText(option, points, tabId) {
+    //Get badge text option from storage
+    chrome.storage.sync.get("_badge", function(res) {
+        //If stored value is equal to option
+        if(res["_badge"] == option) {
+            //Format session points as a string value
+            const badgeString = formatBadgeString(points);
+            //Set badge text as identifier's points value
+            chrome.action.setBadgeText({
+                text: badgeString,
+                tabId: tabId
+            });
+        }
+    });
 }
 
 //Listen to receive updates from changes in tabs
