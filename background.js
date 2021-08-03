@@ -58,7 +58,7 @@ chrome.runtime.onMessage.addListener(function(msg, sender) {
     } else if(msg.session !== undefined) {
         //Format session points as a string value
         const sessionString = formatBadgeString(msg.session);
-        //Set badge text as 
+        //Set badge text as session points
         chrome.action.setBadgeText({
             text: sessionString,
             tabId: sender.tab.id
