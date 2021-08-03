@@ -165,8 +165,9 @@ function setButtonListeners(username) {
             console.log("Reset total points count");
             //Update UI to reflect reset value
             updateUI({username: username});
-        })
-    })
+        });
+    });
+    //TODO: add some sort of confirmation prompt to the reset buttons?
 
     //TODO: add some sort of confirmation prompt to the reset buttons?
 }
