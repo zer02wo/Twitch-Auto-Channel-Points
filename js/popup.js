@@ -99,8 +99,8 @@ function updateUIElementValue(elementId, pointsValue) {
 }
 
 //Updates specified button element with new state
-function updateButtonState(buttonId, state) {
-    const button = document.getElementById(buttonId);
+function updateElementState(elementId, state) {
+    const button = document.getElementById(elementId);
     if(state == "active") {
         button.classList.add("active");
         button.classList.remove("inactive");
