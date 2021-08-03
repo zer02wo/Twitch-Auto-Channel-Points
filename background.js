@@ -63,8 +63,10 @@ chrome.runtime.onMessage.addListener(function(msg, sender) {
         //New content script has initialised, update state from storage
         setContentStateFromStorage(sender, "_dbg", "toggleDebug");
         setContentStateFromStorage(sender, "_exe", "toggleObserver");
-        //Request session points from content script
+        //Request session points from content script, required to initialise badge text
         chrome.tabs.sendMessage(sender.tab.id, "getSessionPoints");
+        //Request username from content script, required to initialise badge text
+        chrome.tabs.sendMessage(sender.tab.id, "getUsername");
         //Enable popup upon handshake initiation
         chrome.action.setPopup({
             popup: "popup.html",
@@ -78,6 +80,15 @@ chrome.runtime.onMessage.addListener(function(msg, sender) {
     } else if(msg.session !== undefined) {
         //Update badge text with session points value
         updateBadgeText("session", msg.session, sender.tab.id);
+    } else if(msg.updateBadgeTextFromStorage !== undefined && msg.username !== undefined) {
+        //Update badge text from stored values with optional username parameter supplied
+        updateBadgeTextFromStorage(msg.updateBadgeTextFromStorage, msg.username);
+    } else if(msg.updateBadgeTextFromStorage !== undefined) {
+        //Update badge text from stored value
+        updateBadgeTextFromStorage(msg.updateBadgeTextFromStorage);
+    } else if(msg.username !== undefined) {
+        //Set initial badge text after requesting username from content script
+        updateBadgeTextFromStorage(sender.tab.id, msg.username);
     }
 });
 
@@ -181,6 +192,30 @@ function updateBadgeText(option, points, tabId) {
                 text: badgeString,
                 tabId: tabId
             });
+        }
+    });
+}
+
+//Update badge text display value from stored values
+function updateBadgeTextFromStorage(tabId, username = undefined) {
+    //Get badge text option from storage
+    chrome.storage.sync.get("_badge", function(resBdg) {
+        //Update badge text according to stored badge option value
+        if(resBdg["_badge"] == "channel" && username !== undefined) {
+            //Get channel points for username from storage
+            chrome.storage.sync.get(username, function(resCha) {
+                //Set badge text with point values from storage
+                updateBadgeText("channel", resCha[username], tabId);
+            });
+        } else if(resBdg["_badge"] == "total") {
+            //Get total channel points from storage
+            chrome.storage.sync.get("_total", function(resTot) {
+                //Set badge text with point values from storage
+                updateBadgeText("total", resTot["_total"], tabId);
+            });
+        } else if(resBdg["_badge"] == "session") {
+            //Request session points from content script, setting badge text handled in response
+            chrome.tabs.sendMessage(tabId, "getSessionPoints");
         }
     });
 }

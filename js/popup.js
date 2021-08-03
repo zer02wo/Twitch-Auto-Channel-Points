@@ -169,7 +169,39 @@ function setButtonListeners(username) {
     });
     //TODO: add some sort of confirmation prompt to the reset buttons?
 
-    //TODO: add some sort of confirmation prompt to the reset buttons?
+    //Set badge text display to channel points. Listen for click on element.
+    document.getElementById("channel-display").addEventListener("click", function() {
+        //Set badge text option to channel
+        chrome.storage.sync.set({"_badge": "channel"}, function() {
+            console.log("Set badge text to channel");
+            //Send message to background script to update badge text from stored values
+            getCurrentTab().then(curTab => {
+                chrome.runtime.sendMessage({updateBadgeTextFromStorage: curTab.id, username: username});
+            });
+        });
+    });
+    //Set badge text display to total points. Listen for click on element.
+    document.getElementById("total-display").addEventListener("click", function() {
+        //Set badge text option to total
+        chrome.storage.sync.set({"_badge": "total"}, function() {
+            console.log("Set badge text to total");
+            //Send message to background script to update badge text from stored values
+            getCurrentTab().then(curTab => {
+                chrome.runtime.sendMessage({updateBadgeTextFromStorage: curTab.id});
+            });
+        });
+    });
+    //Set badge text display to session points. Listen for click on element.
+    document.getElementById("session-display").addEventListener("click", function() {
+        //Set badge text to session
+        chrome.storage.sync.set({"_badge": "session"}, function() {
+            console.log("Set badge text to session");
+            //Send message to background script to update badge text from stored values
+            getCurrentTab().then(curTab => {
+                chrome.runtime.sendMessage({updateBadgeTextFromStorage: curTab.id});
+            });
+        });
+    });
 }
 
 //Update stored object with id and run function by name in content script
