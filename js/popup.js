@@ -198,9 +198,7 @@ function setButtonListeners(username) {
             //Update UI to reflect updated selection
             updateUI({username: username});
             //Send message to background script to update badge text from stored values
-            getCurrentTab().then(curTab => {
-                chrome.runtime.sendMessage({updateBadgeTextFromStorage: curTab.id, username: username});
-            });
+            updateBadgeTextFromMessage(username);
         });
     });
     //Set badge text display to total points. Listen for click on element.
@@ -211,9 +209,7 @@ function setButtonListeners(username) {
             //Update UI to reflect updated selection
             updateUI({username: username});
             //Send message to background script to update badge text from stored values
-            getCurrentTab().then(curTab => {
-                chrome.runtime.sendMessage({updateBadgeTextFromStorage: curTab.id});
-            });
+            updateBadgeTextFromMessage();
         });
     });
     //Set badge text display to session points. Listen for click on element.
@@ -224,10 +220,22 @@ function setButtonListeners(username) {
             //Update UI to reflect updated selection
             updateUI({username: username});
             //Send message to background script to update badge text from stored values
-            getCurrentTab().then(curTab => {
-                chrome.runtime.sendMessage({updateBadgeTextFromStorage: curTab.id});
-            });
+            updateBadgeTextFromMessage();
         });
+    });
+}
+
+//Send message to background script to update badge text display
+function updateBadgeTextFromMessage(username = undefined) {
+    //Get current active browser tab using popup
+    getCurrentTab().then(curTab => {
+        if(username == undefined) {
+            //Send message without optional username parameter
+            chrome.runtime.sendMessage({updateBadgeTextFromStorage: curTab.id});
+        } else {
+            //Send message with username parameter
+            chrome.runtime.sendMessage({updateBadgeTextFromStorage: curTab.id, username: username});
+        }
     });
 }
 
