@@ -16,6 +16,8 @@ chrome.runtime.onInstalled.addListener(function(details) {
         //Check storage for badge text state still exists after update
         checkStorage("_badge");
     }
+    //Set badge colour to Twitch-themed background
+    chrome.action.setBadgeBackgroundColor({color: "#9147FF"});
 });
 
 //Create initial storage object and set to specified state
