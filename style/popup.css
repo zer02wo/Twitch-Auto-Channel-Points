@@ -1,4 +1,6 @@
 body {
+    display: flex;
+    justify-content: space-around;
     width: 360px;
     height: 216px;
     color: #F2F2F2;
@@ -7,19 +9,19 @@ body {
 
 #main-title {
     font-size: 1.5em;
-    margin-top: 0;
+    margin: 0;
 }
 
 #main-wrapper {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    width: 100%;
+    width: 70%;
     height: 100%;
 }
 
 #points-wrapper {
-    width: 75%;
+    width: 100%;
     height: 100%;
 }
 
@@ -28,17 +30,17 @@ body {
 }
 
 .points-display {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     width: 100%;
+    color: inherit;
     border-radius: 10px;
     font-size: 14px;
     padding: 0 5%;
+    border: 0;
     box-sizing: border-box;
 }
 .points-display.active {
     border: solid 1px blue;
+    color: #2F2F2F;
 }
 .points-display.inactive {
     background-color: #9147FF;
@@ -46,6 +48,18 @@ body {
 }
 .points-display > p {
     pointer-events: none;
+    margin: 2px 0;
+}
+
+.points-title {
+    word-break: break-word;
+}
+
+.vr {
+    border-left: 3px solid #9147FF;
+    border-radius: 3px;
+    margin-left: 1.5px;
+    height: 100%;
 }
 
 .extension-control {
