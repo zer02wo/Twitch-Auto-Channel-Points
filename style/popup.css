@@ -44,12 +44,22 @@ body {
 .extension-control {
     height: 32px;
     width: 32px;
+    padding: 0;
+    border: 0;
+    border-radius: 25%;
+    background-color: #9147FF;
+    cursor: pointer;
+    /*TODO: remove this after finalising active/inactive state (removing the 1px border)*/
+    box-sizing: content-box;
 }
 .extension-control.active {
     border: solid 1px blue;
 }
 .extension-control.inactive {
     border: solid 1px red;
+}
+.extension-control > img {
+    pointer-events: none;
 }
 
 #controls-wrapper {
