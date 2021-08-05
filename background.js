@@ -16,12 +16,6 @@ chrome.runtime.onInstalled.addListener(function(details) {
         //Check storage for badge text state still exists after update
         checkStorage("_badge");
     }
-    //Set badge colour to Twitch-themed background
-    chrome.action.setBadgeBackgroundColor({color: "#9147FF"});
-    //Set default icon for all tabs to greyed out (excludes main icon on Extension page)
-    chrome.action.setIcon({
-        path: "images/grey-icon128.png"
-    });
 });
 
 //Create initial storage object and set to specified state
@@ -74,7 +68,7 @@ chrome.runtime.onMessage.addListener(function(msg, sender) {
         });
         //Set icon to be non-"greyed-out"
         chrome.action.setIcon({
-            path: "images/icon128.png",
+            path: "images/icon32.png",
             tabId: sender.tab.id
         });
     } else if(msg.session !== undefined) {
@@ -243,7 +237,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
         });
         //Set icon to "greyed-out" upon changing URL
         chrome.action.setIcon({
-            path: "images/grey-icon128.png",
+            path: "images/grey-icon32.png",
             tabId: tabId
         });
     }
