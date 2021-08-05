@@ -5,28 +5,34 @@
     <title>Twitch Channel Points+</title>
     <link rel="stylesheet" href="style/popup.css">
 </head>
-<body>
-    <h1>Twitch Channel Points+</h1>
-    <div id="points-container">
-        <div id="channel-display" class="points-display inactive">
-            <p id="channel-title" class="points-title">Points earned for</p><p id="channel-points" class="points-value"></p>
-        </div>
-        <div id="total-display" class="points-display inactive">
-            <p id="total-title" class="points-title">Total points earned:</p><p id="total-points" class="points-value"></p>
-        </div>
-        <div id="session-display" class="points-display inactive">
-            <p id="session-title" class="points-title">Points earned this session:</p><p id="session-points" class="points-value">0</p>
-        </div>
-    </div>
-    <div id="extension-controls">
-        <button id="on-off" class="extension-control active">On/Off</button>
-        <button id="debug" class="extension-control active">Debug Mode</button>
-        <button id="reset-channel" class="extension-control">Reset Channel Counter</button>
-        <button id="reset-total" class="extension-control">Reset Total Counter</button>
-        <a href="https://ko-fi.com/zer02wo" target="_blank" rel="noopener noreferrer">
-            <button id="donate" class="extension-control">Donate ❤</button>
-        </a>
-        <script src="js/popup.js"></script>
-    </div>
+<body class="flex-column">
+    <h1 id="main-title">Twitch Channel Points+</h1>
+    <div id="main-wrapper">
+        <section id="points-wrapper">
+            <div id="points-container" class="flex-column">
+                <div id="channel-display" class="points-display inactive">
+                    <p id="channel-title" class="points-title">Points earned for</p><p id="channel-points" class="points-value"></p>
+                </div>
+                <div id="total-display" class="points-display inactive">
+                    <p id="total-title" class="points-title">Total points earned:</p><p id="total-points" class="points-value"></p>
+                </div>
+                <div id="session-display" class="points-display inactive">
+                    <p id="session-title" class="points-title">Points earned this session:</p><p id="session-points" class="points-value">0</p>
+                </div>
+            </div>
+        </section>
+        <section id="controls-wrapper">
+            <div id="extension-controls" class="flex-column">
+                <button id="on-off" class="extension-control active">On/Off</button>
+                <button id="debug" class="extension-control active">Debug Mode</button>
+                <button id="reset-channel" class="extension-control">Reset Channel Counter</button>
+                <button id="reset-total" class="extension-control">Reset Total Counter</button>
+                <a href="https://ko-fi.com/zer02wo" target="_blank" rel="noopener noreferrer">
+                    <button id="donate" class="extension-control">Donate ❤</button>
+                </a>
+            </div>
+        </section>
+    </section>
+    <script src="js/popup.js"></script>
 </body>
 </html>

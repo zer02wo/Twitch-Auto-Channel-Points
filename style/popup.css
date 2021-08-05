@@ -1,11 +1,37 @@
 body {
     width: 360px;
+    height: 216px;
+    color: #F2F2F2;
+    background-color: #6441A5;
+}
+
+#main-title {
+    font-size: 1.5em;
+    margin-top: 0;
+}
+
+#main-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+    height: 100%;
+}
+
+#points-wrapper {
+    width: 75%;
+    height: 100%;
+}
+
+#points-container {
+    height: 100%;
 }
 
 .points-display {
     display: flex;
     align-items: center;
     justify-content: start;
+    width: 100%;
 }
 .points-display.active {
     border: solid 1px blue;
@@ -15,9 +41,28 @@ body {
     cursor: pointer;
 }
 
+.extension-control {
+    height: 32px;
+    width: 32px;
+}
 .extension-control.active {
     border: solid 1px blue;
 }
 .extension-control.inactive {
     border: solid 1px red;
+}
+
+#controls-wrapper {
+    height: 100%;
+}
+
+#extension-controls {
+    height: 100%;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
 }
