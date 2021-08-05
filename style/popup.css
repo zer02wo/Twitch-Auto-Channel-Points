@@ -30,15 +30,22 @@ body {
 .points-display {
     display: flex;
     align-items: center;
-    justify-content: start;
+    justify-content: space-between;
     width: 100%;
+    border-radius: 10px;
+    font-size: 14px;
+    padding: 0 5%;
+    box-sizing: border-box;
 }
 .points-display.active {
     border: solid 1px blue;
 }
 .points-display.inactive {
-    border: solid 1px red;
+    background-color: #9147FF;
     cursor: pointer;
+}
+.points-display > p {
+    pointer-events: none;
 }
 
 .extension-control {
