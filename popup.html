@@ -10,13 +10,16 @@
         <h1 id="main-title">Twitch Channel Points+</h1>
         <div id="points-wrapper">
             <div id="points-container" class="flex-column">
-                <button id="channel-display" class="flex-column points-display inactive">
+                <button id="channel-display" class="flex-column tooltip points-display inactive">
+                    <span id="channel-display-tooltip" class="tooltip-text">Show Channel Points</span>
                     <p id="channel-title" class="points-title">Points earned for</p><p id="channel-points" class="points-value"></p>
                 </button>
-                <button id="total-display" class="flex-column points-display inactive">
+                <button id="total-display" class="flex-column tooltip points-display inactive">
+                    <span id="total-display-tooltip" class="tooltip-text">Show Total Points</span>
                     <p id="total-title" class="points-title">Total points earned:</p><p id="total-points" class="points-value"></p>
                 </button>
-                <button id="session-display" class="flex-column points-display inactive">
+                <button id="session-display" class="flex-column tooltip points-display inactive">
+                    <span id="session-display-tooltip" class="tooltip-text">Show Session Points</span>
                     <p id="session-title" class="points-title">Points earned this session:</p><p id="session-points" class="points-value">0</p>
                 </button>
             </div>

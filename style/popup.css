@@ -16,7 +16,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    width: 70%;
+    width: 67.5%;
     height: 100%;
 }
 
@@ -49,6 +49,9 @@ body {
 .points-display > p {
     pointer-events: none;
     margin: 2px 0;
+}
+.points-display.tooltip > .tooltip-text {
+    right: -52px;
 }
 
 .points-title {
