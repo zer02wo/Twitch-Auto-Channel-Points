@@ -100,6 +100,8 @@ function updateUI(data) {
 //Updates specified points UI element with new value
 function updateUIElementValue(elementId, pointsValue) {
     const element = document.getElementById(elementId);
+    //Format points with commas as appropriate
+    pointsValue = pointsValue.toLocaleString();
     element.innerText = pointsValue;
 }
 
