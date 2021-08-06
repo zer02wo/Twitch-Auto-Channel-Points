@@ -41,12 +41,12 @@ function initialiseUI(username) {
             chrome.storage.sync.set({"_total": 0}, function() {
                 console.log("Total channel points initialised to 0");
                 //Update total points UI element
-                document.getElementById("total-points").innerText = 0;
+                updateUIElementValue("total-points", 0);
             });
         } else {
             //Update total points UI element based on stored value
             let totalPoints = res["_total"];
-            document.getElementById("total-points").innerText = totalPoints;
+            updateUIElementValue("total-points", totalPoints);
         }
     });
 
@@ -58,12 +58,12 @@ function initialiseUI(username) {
             chrome.storage.sync.set({[username]: 0}, function() {
                 console.log(username + " channel points initialised to 0");
                 //Update channel points UI element
-                document.getElementById("channel-points").innerText = "0";
+                updateUIElementValue("channel-points", 0);
             });
         } else {
             //Update channel points UI element based on stored value
             let channelPoints = res[username];
-            document.getElementById("channel-points").innerText = channelPoints;
+            updateUIElementValue("channel-points", channelPoints);
         }
         //Append username to channel title element
         document.getElementById("channel-title").innerText += " " + username + ":";
