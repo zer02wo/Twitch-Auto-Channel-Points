@@ -4,7 +4,7 @@ body {
     width: 360px;
     height: 216px;
     color: #F2F2F2;
-    background-color: #772CE8;
+    background-color: #6518d8;
 }
 
 #main-title {
@@ -38,11 +38,11 @@ body {
     padding: 0 5%;
     border: 0;
     background-color: #9147FF;
-    box-shadow: 1.5px 1.5px 7px #4F3383;
+    box-shadow: 1.5px 1.5px 7px #2A1A46;
 }
 .points-display.active {
-    background-color: #6E28D7;
-    box-shadow: inset 1.5px 1.5px 7px #4F3383;
+    background-color: #5A1EB4;
+    box-shadow: inset 1.5px 1.5px 7px #2A1A46;
 }
 .points-display.inactive {
     cursor: pointer;
@@ -77,14 +77,14 @@ body {
     border-radius: 25%;
     background-color: #9147FF;
     cursor: pointer;
-    box-shadow: 1px 1px 7px #4F3383;
+    box-shadow: 1px 1px 7px #2A1A46;
 }
 .extension-control:hover {
     background-color: #A66BFF;
 }
 .extension-control.active {
-    background-color: #6E28D7;
-    box-shadow: inset 1px 1px 5px #4F3383;
+    background-color: #5A1EB4;
+    box-shadow: inset 1px 1px 4px #2A1A46;
 }
 .extension-control.active:hover {
     background-color: #9147FF;
