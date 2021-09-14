@@ -98,17 +98,20 @@ function observerCallback(mutationsList) {
                 if(pulseAnimation !== null) {
                     //Retrieve amount of channel points earned
                     const pointsStr = +pulseAnimation.querySelector("div").innerText;
-                    //Format channel points to numeric value
-                    const pointsNum = formatPoints(pointsStr);           
-                    //Add points to total
-                    sessionPoints += pointsNum;
-                    //Send message to background script to update point totals
-                    const username = getUsername();
-                    chrome.runtime.sendMessage({username: username, points: pointsNum});
-                    //Log to console when in debug mode
-                    debugMode && console.log(pointsNum + " points added!\nPoints for this session: " + sessionPoints);
-                    //Send message to background to update popup with session points
-                    chrome.runtime.sendMessage({session: sessionPoints});
+                    //Ignore messages about multipliers
+                    if(pointStr.toLowerCase().indexOf("x") !== -1) {
+                        //Format channel points to numeric value
+                        const pointsNum = formatPoints(pointsStr);           
+                        //Add points to total
+                        sessionPoints += pointsNum;
+                        //Send message to background script to update point totals
+                        const username = getUsername();
+                        chrome.runtime.sendMessage({username: username, points: pointsNum});
+                        //Log to console when in debug mode
+                        debugMode && console.log(pointsNum + " points added!\nPoints for this session: " + sessionPoints);
+                        //Send message to background to update popup with session points
+                        chrome.runtime.sendMessage({session: sessionPoints});
+                    }
                 }
             }
         }
