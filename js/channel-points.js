@@ -99,7 +99,7 @@ function observerCallback(mutationsList) {
                     //Retrieve amount of channel points earned
                     const pointsStr = +pulseAnimation.querySelector("div").innerText;
                     //Ignore messages about multipliers
-                    if(pointStr.toLowerCase().indexOf("x") !== -1) {
+                    if(pointsStr.toLowerCase().indexOf("x") !== -1) {
                         //Format channel points to numeric value
                         const pointsNum = formatPoints(pointsStr);           
                         //Add points to total
