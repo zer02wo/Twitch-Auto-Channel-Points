@@ -16,7 +16,7 @@
         "default_title": "Twitch Channel Points+"
     },
 
-    "permissions": ["storage", "tabs", "declarativeContent"],
+    "permissions": ["storage", "tabs"],
 
     "background": {
         "service_worker": "background.js"
