@@ -3,7 +3,7 @@
     "name": "Twitch Channel Points+",
     "short_name": "TTV Points+",
     "version": "1.0.0",
-    "description": "Automatically redeem channel points on any live Twitch stream. Keep track of the points you earn across all Twitch channels, including predictions!",
+    "description": "Automatically redeem channel points on any live Twitch stream and keep track of the points you earn across all channels!",
 
     "icons": {
         "16": "images/icon16.png",
