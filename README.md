@@ -18,6 +18,8 @@ A web browser extension to automatically redeem and enhance the functionality of
 
 **Completed**
 
+Freely available on the [Chrome extension store](https://chrome.google.com/webstore/detail/twitch-channel-points%20/gkojgpkfappcahmkcgnpaincneokgjdo).
+
 ## License
 
 [MIT](LICENSE)
