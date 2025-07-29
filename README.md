@@ -16,9 +16,13 @@ A web browser extension to automatically redeem and enhance the functionality of
 
 ## Project Status
 
-**Completed**
+**Completed v1.0.0**
 
 Freely available on the [Chrome extension store](https://chrome.google.com/webstore/detail/twitch-channel-points%20/gkojgpkfappcahmkcgnpaincneokgjdo).
+
+**TODO:**
+- Make extension available in Firefox
+- Debug initialisation issues (tab already open? visiting URL manually? reloading?)
 
 ## License
 
